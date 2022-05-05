@@ -91,6 +91,8 @@ helper.Debug = true
 
 - v1.0.0
   - Feature complete
+- v1.0.1
+  - Fix data struct *.StringP() output
 
 ### License
 
