@@ -41,7 +41,7 @@ func (self *RepoEncryptedPair) String() string {
 	return *self.StringP()
 }
 
-// Github repository action secret structure
+// Github repository public key structure
 type RepoPublicKey struct {
 	Key_id string `json:"key_id"`
 	Key    string `json:"key"`
