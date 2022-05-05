@@ -43,11 +43,13 @@ type GitApiIn struct {
 
 // GitApi output structure
 type GitApiOut struct {
-	Body   *string      `json:"Body"`
-	Err    string       `json:"Err"`
-	Header *http.Header `json:"Header"` // Http response header
-	Status string       `json:"Status"` // Http response status
-	Url    string       `json:"Url"`    // In.Uri + In.Endpoint
+	Body    *[]byte      `json:"Body"`
+	Err     string       `json:"Err"`
+	Header  *http.Header `json:"Header"`  // Http response header
+	Url     string       `json:"Url"`     // In.Uri + In.Endpoint
+	Output  *string      `json:"Output"`  // Api response body in string
+	Status  string       `json:"Status"`  // Http response status
+	Success bool         `json:"Success"` // Set to true if status code 2xx
 }
 
 // GitApi
@@ -58,7 +60,6 @@ type GitApi[T GitApiInfo] struct {
 	User   string    `json:"User"`   // Api username
 	Vendor string    `json:"Vendor"` // github/gitea
 	Info   T         `json:"Info"`   // Pointer to structure
-	Output *string   `json:"Output"` // Api response body in string
 }
 
 func GitApiNew[T GitApiInfo](name string, token string, entrypoint string, user string, vendor string, info T) *GitApi[T] {
@@ -100,9 +101,13 @@ func (self *GitApi[GitApiInfo]) EndpointReposSecretsPubkey() {
 	self.In.Endpoint += "/actions/secrets/public-key"
 }
 
-// GitApi Do
-//	- Do request using info in GitApi.In
-//	- Put response info into GitApi.Out
+//	Execute http request using info in GitApi.In. Then put response info in GitApi.Out.
+//
+//	GitApi.In.Token, if empty, authorizeation header will not be set.
+//
+//	GitApi.Info, if not nil, will be
+//			- auto marshaled for send other than "GET"
+//			- auto unmarshaled from http response body
 func (self *GitApi[GitApiInfo]) Do() bool {
 	// Prepare Api Data
 	if self.In.Method != http.MethodGet {
@@ -123,7 +128,9 @@ func (self *GitApi[GitApiInfo]) Do() bool {
 	self.In.Header = &req.Header
 	self.In.Header.Add("Accept", "application/vnd.github.v3+json")
 	self.In.Header.Add("Content-Type", "application/json")
-	self.In.Header.Add("Authorization", "token "+self.In.Token)
+	if len(self.In.Token) > 0 {
+		self.In.Header.Add("Authorization", "token "+self.In.Token)
+	}
 	// Request
 	client := http.DefaultClient
 	res, err := client.Do(req)
@@ -135,81 +142,69 @@ func (self *GitApi[GitApiInfo]) Do() bool {
 	if err != nil {
 		self.Out.Err = err.Error()
 	}
-	bodyStr := string(body)
-	self.Out.Body = &bodyStr
 	res.Body.Close()
+	// Fill in self.Out
+	self.Out.Body = &body
 	self.Out.Header = &res.Header
 	self.Out.Status = res.Status
+	// check status code == 2XX
+	self.Out.Success = (self.Out.Status[0] == '2')
+
+	// Unmarshal
+	self.ProcessOutput()
+
 	helper.ReportDebug(&self, "api", false)
 
-	if res.Status[0] == '2' {
-		return true
-	} else {
-		return false
-	}
+	return self.Out.Success
 }
 
 // GitApi Get action wrapper
 func (self *GitApi[GitApiInfo]) Get() bool {
 	self.In.Method = http.MethodGet
-	success := self.Do()
-	// Unmarshal
-	err := json.Unmarshal([]byte(*self.Out.Body), self.Info)
-
-	if success && err == nil && self.Info != nil {
-		self.Output = self.Info.StringP()
-	} else {
-		self.Output = self.OutputStringP()
-	}
-	return success
+	return self.Do()
 }
 
 // GitApi Del action wrapper
 func (self *GitApi[GitApiInfo]) Del() bool {
 	self.In.Method = http.MethodDelete
-	success := self.Do()
-	self.Output = helper.ReportSp(self.OutputStringP(), "", true)
-	return success
+	return self.Do()
 }
 
 // GitApi Patch action wrapper
 func (self *GitApi[GitApiInfo]) Patch() bool {
 	self.In.Method = http.MethodPatch
-	success := self.Do()
-	self.Output = helper.ReportSp(self.OutputStringP(), "", true)
-	return success
+	return self.Do()
 }
 
 // GitApi Post action wrapper
 func (self *GitApi[GitApiInfo]) Post() bool {
 	self.In.Method = http.MethodPost
-	// Exec Api
-	success := self.Do()
-	self.Output = helper.ReportSp(self.OutputStringP(), "", true)
-	return success
+	return self.Do()
 }
 
 // GitApi Put action wrapper
 func (self *GitApi[GitApiInfo]) Put() bool {
 	self.In.Method = http.MethodPut
-	success := self.Do()
-	self.Output = helper.ReportSp(self.OutputStringP(), "", true)
-	return success
+	return self.Do()
 }
 
 // Print both Body and Err into string pointer
-func (self *GitApi[GitApiInfo]) OutputStringP() *string {
-	var output string
-	var sP *string
-
-	sP = helper.ReportSp(self.Out.Body, "", true)
-	if sP != nil {
-		output += *sP
+func (self *GitApi[GitApiInfo]) ProcessOutput() {
+	// Unmarshal
+	err := json.Unmarshal(*self.Out.Body, self.Info)
+	if self.Out.Success && err == nil && self.Info != nil {
+		// Use Info string func
+		self.Out.Output = self.Info.StringP()
+	} else {
+		var output string
+		strP := helper.ReportSp(self.Out.Body, "", true)
+		if strP != nil {
+			output += *strP
+		}
+		strP = helper.ReportSp(self.Out.Err, "", true)
+		if strP != nil {
+			output += *strP
+		}
+		self.Out.Output = &output
 	}
-	sP = helper.ReportSp(self.Out.Err, "", true)
-	if sP != nil {
-		output += *sP
-	}
-
-	return &output
 }
