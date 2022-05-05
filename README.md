@@ -93,6 +93,11 @@ helper.Debug = true
   - Feature complete
 - v1.0.1
   - Fix data struct *.StringP() output
+- v1.1.0
+  - Consolidate output processing
+  - GitApiOut
+    - move output from GitApi
+    - add Success
 
 ### License
 
