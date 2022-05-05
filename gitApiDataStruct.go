@@ -32,8 +32,8 @@ type RepoEncryptedPair struct {
 
 func (self *RepoEncryptedPair) StringP() *string {
 	var str string
-	str = "Value:" + self.Encrypted_value + "\n"
-	str = "Key ID:" + self.Key_id + "\n"
+	str += "Value:" + self.Encrypted_value + "\n"
+	str += "Key ID:" + self.Key_id + "\n"
 	return &str
 }
 
@@ -49,8 +49,8 @@ type RepoPublicKey struct {
 
 func (self *RepoPublicKey) StringP() *string {
 	var str string
-	str = "Key:" + self.Key + "\n"
-	str = "Key ID:" + self.Key_id + "\n"
+	str += "Key:" + self.Key + "\n"
+	str += "Key ID:" + self.Key_id + "\n"
 	return &str
 }
 
@@ -65,7 +65,7 @@ type RepoPrivate struct {
 
 func (self *RepoPrivate) StringP() *string {
 	var str string
-	str = helper.BoolString(self.Private)
+	str += helper.BoolString(self.Private)
 	return &str
 }
 
