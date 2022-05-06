@@ -35,12 +35,12 @@ import (
 
 // GitApi http input structure
 type GitApiIn struct {
-	Data       string      `json:"Data"`       // Json marshaled Info
-	Entrypoint string      `json:"Entrypoint"` // Api base url
-	Endpoint   string      `json:"Endpoint"`   // Api endpoint
-	Header     http.Header `json:"Header"`     // Http request header
-	Method     string      `json:"Method"`     // Http request method
-	Token      string      `json:"Token"`      // Api auth token
+	Data       string       `json:"Data"`       // Json marshaled Info
+	Entrypoint string       `json:"Entrypoint"` // Api base url
+	Endpoint   string       `json:"Endpoint"`   // Api endpoint
+	Header     *http.Header `json:"Header"`     // Http request header
+	Method     string       `json:"Method"`     // Http request method
+	Token      string       `json:"Token"`      // Api auth token
 }
 
 // GitApi http output structure
@@ -117,6 +117,8 @@ func (self *GitApi[GitApiInfo]) EndpointReposSecretsPubkey() {
 
 // Set github/gitea header
 func (self *GitApi[GitApiInfo]) HeaderGithub() {
+	header := make(http.Header)
+	self.In.Header = &header
 	self.In.Header.Add("Accept", "application/vnd.github.v3+json")
 	self.In.Header.Add("Content-Type", "application/json")
 	if len(self.In.Token) > 0 {
@@ -151,7 +153,7 @@ func (self *GitApi[GitApiInfo]) Do() bool {
 		self.Out.Err = err.Error()
 	}
 	// Set request headers
-	req.Header = self.In.Header
+	req.Header = *self.In.Header
 	// Request
 	client := http.DefaultClient
 	res, err := client.Do(req)
