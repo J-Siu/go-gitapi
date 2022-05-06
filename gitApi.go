@@ -60,7 +60,7 @@ type GitApi[T GitApiInfo] struct {
 	User   string    `json:"User"`   // Api username
 	Vendor string    `json:"Vendor"` // github/gitea
 	Repo   string    `json:"Repo"`   // Repository name
-	Info   T         `json:"Info"`   // Pointer to structure
+	Info   T         `json:"Info"`   // Pointer to structure. Use NilType.Nil() for nil pointer
 }
 
 // Setup a *GitApi

@@ -157,7 +157,7 @@ func (self *RepoInfoList) String() string {
 	return *self.StringP()
 }
 
-// This is used as a dummy type for nil parameter
+// This is used as a dummy type for nil GitApiInfo parameter
 type NilType struct {
 	Nil *byte // Dummy pointer
 }
