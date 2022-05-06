@@ -31,7 +31,7 @@ import (
 	"github.com/J-Siu/go-helper"
 )
 
-// GitApi input structure
+// GitApi http input structure
 type GitApiIn struct {
 	Data       string       `json:"Data"` // Json marshaled Info
 	Endpoint   string       `json:"Endpoint"`
@@ -41,7 +41,7 @@ type GitApiIn struct {
 	Token      string       `json:"Token"`
 }
 
-// GitApi output structure
+// GitApi http output structure
 type GitApiOut struct {
 	Body    *[]byte      `json:"Body"`
 	Err     string       `json:"Err"`
@@ -54,19 +54,29 @@ type GitApiOut struct {
 
 // GitApi
 type GitApi[T GitApiInfo] struct {
-	In     GitApiIn  `json:"In"`
-	Out    GitApiOut `json:"Out"`
+	In     GitApiIn  `json:"In"`     // Api http input
+	Out    GitApiOut `json:"Out"`    // Api http output
 	Name   string    `json:"Name"`   // Name of connection
 	User   string    `json:"User"`   // Api username
 	Vendor string    `json:"Vendor"` // github/gitea
+	Repo   string    `json:"Repo"`   // Repository name
 	Info   T         `json:"Info"`   // Pointer to structure
 }
 
-func GitApiNew[T GitApiInfo](name string, token string, entrypoint string, user string, vendor string, info T) *GitApi[T] {
+// Setup a *GitApi
+func GitApiNew[T GitApiInfo](
+	name string,
+	token string,
+	entrypoint string,
+	user string,
+	vendor string,
+	repo string,
+	info T) *GitApi[T] {
 	var self GitApi[T]
 	self.Name = name
 	self.User = user
 	self.Vendor = vendor
+	self.Repo = repo
 	self.Info = info
 	self.In.Entrypoint = entrypoint
 	self.In.Token = token
@@ -79,8 +89,10 @@ func (self *GitApi[GitApiInfo]) EndpointUserRepos() {
 }
 
 // Initialize endpoint /repos/OWNER/REPO
+//
+// Use current directory if GitApi.Repo is empty
 func (self *GitApi[GitApiInfo]) EndpointRepos() {
-	self.In.Endpoint = "/repos/" + self.User + "/" + helper.CurrentDirBase()
+	self.In.Endpoint = "/repos/" + self.User + "/" + self.Repo
 }
 
 // Initialize endpoint /repos/OWNER/REPO/topics
