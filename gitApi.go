@@ -27,18 +27,20 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"net/url"
+	"path"
 
 	"github.com/J-Siu/go-helper"
 )
 
 // GitApi http input structure
 type GitApiIn struct {
-	Data       string       `json:"Data"` // Json marshaled Info
-	Endpoint   string       `json:"Endpoint"`
-	Entrypoint string       `json:"Entrypoint"` // Api base url
-	Header     *http.Header `json:"Header"`     // Http request header
-	Method     string       `json:"Method"`
-	Token      string       `json:"Token"`
+	Data       string      `json:"Data"`       // Json marshaled Info
+	Entrypoint string      `json:"Entrypoint"` // Api base url
+	Endpoint   string      `json:"Endpoint"`   // Api endpoint
+	Header     http.Header `json:"Header"`     // Http request header
+	Method     string      `json:"Method"`     // Http request method
+	Token      string      `json:"Token"`      // Api auth token
 }
 
 // GitApi http output structure
@@ -92,25 +94,34 @@ func (self *GitApi[GitApiInfo]) EndpointUserRepos() {
 //
 // Use current directory if GitApi.Repo is empty
 func (self *GitApi[GitApiInfo]) EndpointRepos() {
-	self.In.Endpoint = "/repos/" + self.User + "/" + self.Repo
+	self.In.Endpoint = path.Join("repos", self.User, self.Repo)
 }
 
 // Initialize endpoint /repos/OWNER/REPO/topics
 func (self *GitApi[GitApiInfo]) EndpointReposTopics() {
 	self.EndpointRepos()
-	self.In.Endpoint += "/topics"
+	self.In.Endpoint = path.Join(self.In.Endpoint, "topics")
 }
 
 // Initialize endpoint /repos/OWNER/REPO/actions/secrets
 func (self *GitApi[GitApiInfo]) EndpointReposSecrets() {
 	self.EndpointRepos()
-	self.In.Endpoint += "/actions/secrets"
+	self.In.Endpoint = path.Join(self.In.Endpoint, "actions", "secrets")
 }
 
 // Initialize endpoint /repos/OWNER/REPO/actions/secrets/public-key
 func (self *GitApi[GitApiInfo]) EndpointReposSecretsPubkey() {
-	self.EndpointRepos()
-	self.In.Endpoint += "/actions/secrets/public-key"
+	self.EndpointReposSecrets()
+	self.In.Endpoint = path.Join(self.In.Endpoint, "public-key")
+}
+
+// Set github/gitea header
+func (self *GitApi[GitApiInfo]) HeaderGithub() {
+	self.In.Header.Add("Accept", "application/vnd.github.v3+json")
+	self.In.Header.Add("Content-Type", "application/json")
+	if len(self.In.Token) > 0 {
+		self.In.Header.Add("Authorization", "token "+self.In.Token)
+	}
 }
 
 //	Execute http request using info in GitApi.In. Then put response info in GitApi.Out.
@@ -126,8 +137,11 @@ func (self *GitApi[GitApiInfo]) Do() bool {
 		j, _ := json.Marshal(&self.Info)
 		self.In.Data = string(j)
 	}
+	// Prepare url
+	url, _ := url.Parse(self.In.Entrypoint)
+	url.Path = path.Join(url.Path, self.In.Endpoint)
+	self.Out.Url = url.String()
 	// Prepare request
-	self.Out.Url = self.In.Entrypoint + self.In.Endpoint
 	dataBufferP := bytes.NewBufferString(self.In.Data)
 	req, err := http.NewRequest(
 		self.In.Method,
@@ -136,13 +150,8 @@ func (self *GitApi[GitApiInfo]) Do() bool {
 	if err != nil {
 		self.Out.Err = err.Error()
 	}
-	// Set headers
-	self.In.Header = &req.Header
-	self.In.Header.Add("Accept", "application/vnd.github.v3+json")
-	self.In.Header.Add("Content-Type", "application/json")
-	if len(self.In.Token) > 0 {
-		self.In.Header.Add("Authorization", "token "+self.In.Token)
-	}
+	// Set request headers
+	req.Header = self.In.Header
 	// Request
 	client := http.DefaultClient
 	res, err := client.Do(req)
@@ -159,7 +168,7 @@ func (self *GitApi[GitApiInfo]) Do() bool {
 	self.Out.Body = &body
 	self.Out.Header = &res.Header
 	self.Out.Status = res.Status
-	// check status code == 2XX
+	// if http status code == 2XX
 	self.Out.Success = (self.Out.Status[0] == '2')
 
 	// Unmarshal
