@@ -107,6 +107,8 @@ helper.Debug = true
     - Add HeaderGithub()
 - v1.2.2
   - Update go-helper package
+- v1.2.3
+  - Update go-helper package
 ### License
 
 The MIT License (MIT)
