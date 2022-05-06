@@ -176,7 +176,7 @@ func (self *GitApi[GitApiInfo]) Do() bool {
 	// Unmarshal
 	self.ProcessOutput()
 
-	helper.ReportDebug(&self, "api", false)
+	helper.ReportDebug(&self, "api", false, false)
 
 	return self.Out.Success
 }
@@ -220,11 +220,11 @@ func (self *GitApi[GitApiInfo]) ProcessOutput() {
 		self.Out.Output = self.Info.StringP()
 	} else {
 		var output string
-		strP := helper.ReportSp(self.Out.Body, "", true)
+		strP := helper.ReportSp(self.Out.Body, "", true, false)
 		if strP != nil {
 			output += *strP
 		}
-		strP = helper.ReportSp(self.Out.Err, "", true)
+		strP = helper.ReportSp(self.Out.Err, "", true, false)
 		if strP != nil {
 			output += *strP
 		}

@@ -1,5 +1,5 @@
-github.com/J-Siu/go-helper v0.9.3 h1:m31j/p40c8zXbB1E/KZyByKcybdRFLQAtiK+gW5VLXM=
-github.com/J-Siu/go-helper v0.9.3/go.mod h1:mXt38LGT6QSnZSsDmoO/fJNkhKO5U8wFxqsYHCwZoOI=
+github.com/J-Siu/go-helper v0.9.4 h1:hpmKIoZfpzFK0OPKQIF0NPdXJ17FxznS4ApPfxFJ98w=
+github.com/J-Siu/go-helper v0.9.4/go.mod h1:JVGHLTowzGwqSwzh7+ENqM/A19J5o4rXMqtZNpSWXlg=
 golang.org/x/crypto v0.0.0-20220427172511-eb4f295cb31f h1:OeJjE6G4dgCY4PIXvIRQbE8+RX+uXZyGhUy/ksMGJoc=
 golang.org/x/crypto v0.0.0-20220427172511-eb4f295cb31f/go.mod h1:IxCIyHEi3zRg3s0A5j5BB6A9Jmi73HwBIUl50j+osU4=
 golang.org/x/sys v0.0.0-20220503163025-988cb79eb6c6 h1:nonptSpoQ4vQjyraW20DXPAglgQfVnM9ZC6MmNLMR60=
