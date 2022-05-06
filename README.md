@@ -62,6 +62,8 @@ Following is code to create a new repository:
       &info)    // data for request
     // Setup endpoint
     gitApi.EndpointRepos()
+    // Setup Github header
+    gitApi.HeaderGithub()
     // Do post request
     success := gitApi.Post()
     ```
@@ -95,10 +97,14 @@ helper.Debug = true
   - Fix data struct *.StringP() output
 - v1.1.0
   - Consolidate output processing
+- v1.2.0
   - GitApiOut
     - move output from GitApi
     - add Success
-
+    GitApi struct
+    - Change Header to non-pointer
+    - Use path and url package to handle endpoint and url
+    - Add HeaderGithub()
 ### License
 
 The MIT License (MIT)
