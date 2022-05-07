@@ -107,6 +107,9 @@ helper.Debug = true
     - Add HeaderGithub()
 - v1.2.4
   - Update go-helper package for bug fix
+- v1.2.5
+  - GitApiIn
+    - Add UrlVal(url.Values)
 
 ### License
 
