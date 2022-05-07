@@ -19,7 +19,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-
 package gitapi
 
 import (
@@ -41,6 +40,7 @@ type GitApiIn struct {
 	Header     *http.Header `json:"Header"`     // Http request header
 	Method     string       `json:"Method"`     // Http request method
 	Token      string       `json:"Token"`      // Api auth token
+	UrlVal     *url.Values  `json:"UrlVal"`     // Api url values
 }
 
 // GitApi http output structure
@@ -48,7 +48,7 @@ type GitApiOut struct {
 	Body    *[]byte      `json:"Body"`
 	Err     string       `json:"Err"`
 	Header  *http.Header `json:"Header"`  // Http response header
-	Url     string       `json:"Url"`     // In.Uri + In.Endpoint
+	Url     *url.URL     `json:"Url"`     // In.Uri + In.Endpoint
 	Output  *string      `json:"Output"`  // Api response body in string
 	Status  string       `json:"Status"`  // Http response status
 	Success bool         `json:"Success"` // Set to true if status code 2xx
@@ -126,6 +126,18 @@ func (self *GitApi[GitApiInfo]) HeaderGithub() {
 	}
 }
 
+// Setup empty API header
+func (self *GitApi[GitApiInfo]) HeaderInit() {
+	header := make(http.Header)
+	self.In.Header = &header
+}
+
+// Setup empty API url values
+func (self *GitApiIn) UrlValInit() {
+	urlVal := make(url.Values)
+	self.UrlVal = &urlVal
+}
+
 //	Execute http request using info in GitApi.In. Then put response info in GitApi.Out.
 //
 //	GitApi.In.Token, if empty, authorizeation header will not be set.
@@ -140,14 +152,16 @@ func (self *GitApi[GitApiInfo]) Do() bool {
 		self.In.Data = string(j)
 	}
 	// Prepare url
-	url, _ := url.Parse(self.In.Entrypoint)
-	url.Path = path.Join(url.Path, self.In.Endpoint)
-	self.Out.Url = url.String()
+	self.Out.Url, _ = url.Parse(self.In.Entrypoint)
+	self.Out.Url.Path = path.Join(self.Out.Url.Path, self.In.Endpoint)
+	if self.In.UrlVal != nil {
+		self.Out.Url.RawQuery = self.In.UrlVal.Encode()
+	}
 	// Prepare request
 	dataBufferP := bytes.NewBufferString(self.In.Data)
 	req, err := http.NewRequest(
 		self.In.Method,
-		self.Out.Url,
+		self.Out.Url.String(),
 		dataBufferP)
 	if err != nil {
 		self.Out.Err = err.Error()
