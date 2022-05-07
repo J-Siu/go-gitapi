@@ -105,10 +105,9 @@ helper.Debug = true
     - Change Header to non-pointer
     - Use path and url package to handle endpoint and url
     - Add HeaderGithub()
-- v1.2.2
-  - Update go-helper package
-- v1.2.3
-  - Update go-helper package
+- v1.2.4
+  - Update go-helper package for bug fix
+
 ### License
 
 The MIT License (MIT)
