@@ -110,6 +110,8 @@ helper.Debug = true
 - v1.2.5
   - GitApiIn
     - Add UrlVal(url.Values)
+- v1.2.6
+  - Update go-helper package for bug fix
 
 ### License
 

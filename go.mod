@@ -2,7 +2,7 @@ module github.com/J-Siu/go-gitapi
 
 go 1.18
 
-require github.com/J-Siu/go-helper v0.9.8
+require github.com/J-Siu/go-helper v1.0.0
 
 require (
 	golang.org/x/crypto v0.0.0-20220507011949-2cf3adece122 // indirect
