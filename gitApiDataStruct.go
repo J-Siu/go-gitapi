@@ -177,15 +177,15 @@ func Nil() *NilType {
 
 // GitApi structures interface
 type GitApiInfo interface {
-	*RepoEncryptedPair |
-		*RepoPublicKey |
-		*RepoPrivate |
-		*RepoVisibility |
-		*RepoDescription |
-		*RepoTopics |
-		*RepoInfo |
-		*RepoInfoList |
-		*NilType
+	// *RepoEncryptedPair |
+	// *RepoPublicKey |
+	// *RepoPrivate |
+	// *RepoVisibility |
+	// *RepoDescription |
+	// *RepoTopics |
+	// *RepoInfo |
+	// *RepoInfoList |
+	// *NilType
 	StringP() *string
 	String() string
 }

@@ -55,26 +55,26 @@ type GitApiOut struct {
 }
 
 // GitApi
-type GitApi[T GitApiInfo] struct {
-	In     GitApiIn  `json:"In"`     // Api http input
-	Out    GitApiOut `json:"Out"`    // Api http output
-	Name   string    `json:"Name"`   // Name of connection
-	User   string    `json:"User"`   // Api username
-	Vendor string    `json:"Vendor"` // github/gitea
-	Repo   string    `json:"Repo"`   // Repository name
-	Info   T         `json:"Info"`   // Pointer to structure. Use NilType.Nil() for nil pointer
+type GitApi struct {
+	In     GitApiIn   `json:"In"`     // Api http input
+	Out    GitApiOut  `json:"Out"`    // Api http output
+	Name   string     `json:"Name"`   // Name of connection
+	User   string     `json:"User"`   // Api username
+	Vendor string     `json:"Vendor"` // github/gitea
+	Repo   string     `json:"Repo"`   // Repository name
+	Info   GitApiInfo `json:"Info"`   // Pointer to structure. Use NilType.Nil() for nil pointer
 }
 
 // Setup a *GitApi
-func GitApiNew[T GitApiInfo](
+func GitApiNew(
 	name string,
 	token string,
 	entrypoint string,
 	user string,
 	vendor string,
 	repo string,
-	info T) *GitApi[T] {
-	var self GitApi[T]
+	info GitApiInfo) *GitApi {
+	var self GitApi
 	self.Name = name
 	self.User = user
 	self.Vendor = vendor
@@ -86,37 +86,37 @@ func GitApiNew[T GitApiInfo](
 }
 
 // Initialize endpoint /user/repos
-func (self *GitApi[GitApiInfo]) EndpointUserRepos() {
+func (self *GitApi) EndpointUserRepos() {
 	self.In.Endpoint = "/user/repos"
 }
 
 // Initialize endpoint /repos/OWNER/REPO
 //
 // Use current directory if GitApi.Repo is empty
-func (self *GitApi[GitApiInfo]) EndpointRepos() {
+func (self *GitApi) EndpointRepos() {
 	self.In.Endpoint = path.Join("repos", self.User, self.Repo)
 }
 
 // Initialize endpoint /repos/OWNER/REPO/topics
-func (self *GitApi[GitApiInfo]) EndpointReposTopics() {
+func (self *GitApi) EndpointReposTopics() {
 	self.EndpointRepos()
 	self.In.Endpoint = path.Join(self.In.Endpoint, "topics")
 }
 
 // Initialize endpoint /repos/OWNER/REPO/actions/secrets
-func (self *GitApi[GitApiInfo]) EndpointReposSecrets() {
+func (self *GitApi) EndpointReposSecrets() {
 	self.EndpointRepos()
 	self.In.Endpoint = path.Join(self.In.Endpoint, "actions", "secrets")
 }
 
 // Initialize endpoint /repos/OWNER/REPO/actions/secrets/public-key
-func (self *GitApi[GitApiInfo]) EndpointReposSecretsPubkey() {
+func (self *GitApi) EndpointReposSecretsPubkey() {
 	self.EndpointReposSecrets()
 	self.In.Endpoint = path.Join(self.In.Endpoint, "public-key")
 }
 
 // Set github/gitea header
-func (self *GitApi[GitApiInfo]) HeaderGithub() {
+func (self *GitApi) HeaderGithub() {
 	header := make(http.Header)
 	self.In.Header = &header
 	self.In.Header.Add("Accept", "application/vnd.github.v3+json")
@@ -127,7 +127,7 @@ func (self *GitApi[GitApiInfo]) HeaderGithub() {
 }
 
 // Setup empty API header
-func (self *GitApi[GitApiInfo]) HeaderInit() {
+func (self *GitApi) HeaderInit() {
 	header := make(http.Header)
 	self.In.Header = &header
 }
@@ -145,7 +145,7 @@ func (self *GitApiIn) UrlValInit() {
 //	GitApi.Info, if not nil, will be
 //			- auto marshaled for send other than "GET"
 //			- auto unmarshaled from http response body
-func (self *GitApi[GitApiInfo]) Do() bool {
+func (self *GitApi) Do() bool {
 	// Prepare Api Data
 	if self.In.Method != http.MethodGet {
 		j, _ := json.Marshal(&self.Info)
@@ -196,37 +196,37 @@ func (self *GitApi[GitApiInfo]) Do() bool {
 }
 
 // GitApi Get action wrapper
-func (self *GitApi[GitApiInfo]) Get() bool {
+func (self *GitApi) Get() bool {
 	self.In.Method = http.MethodGet
 	return self.Do()
 }
 
 // GitApi Del action wrapper
-func (self *GitApi[GitApiInfo]) Del() bool {
+func (self *GitApi) Del() bool {
 	self.In.Method = http.MethodDelete
 	return self.Do()
 }
 
 // GitApi Patch action wrapper
-func (self *GitApi[GitApiInfo]) Patch() bool {
+func (self *GitApi) Patch() bool {
 	self.In.Method = http.MethodPatch
 	return self.Do()
 }
 
 // GitApi Post action wrapper
-func (self *GitApi[GitApiInfo]) Post() bool {
+func (self *GitApi) Post() bool {
 	self.In.Method = http.MethodPost
 	return self.Do()
 }
 
 // GitApi Put action wrapper
-func (self *GitApi[GitApiInfo]) Put() bool {
+func (self *GitApi) Put() bool {
 	self.In.Method = http.MethodPut
 	return self.Do()
 }
 
 // Print both Body and Err into string pointer
-func (self *GitApi[GitApiInfo]) ProcessOutput() {
+func (self *GitApi) ProcessOutput() {
 	// Unmarshal
 	err := json.Unmarshal(*self.Out.Body, self.Info)
 	if self.Out.Success && err == nil && self.Info != nil {

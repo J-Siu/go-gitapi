@@ -12,22 +12,19 @@ func TestGetGithubRepository(t *testing.T) {
 
 	var repoList RepoInfoList
 
-	// Get instance
-	// https://api.github.com/repositories
-	gitApi := GitApiNew(
-		"Test",                   // Connection name for debug print out purpose
-		"",                       // API token,
-		"https://api.github.com", // API entrypoint
-		"",                       // user
-		"",                       // vendor/brand
-		"",                       // Repo
-		&repoList)                // data for request
+	// var gitApi = &GitApi{
+	// 	Name: "Test",
+	// 	Info: &repoList,
+	// 	In: GitApiIn{
+	// 		Entrypoint: "https://api.github.com",
+	// 	},
+	// }
+	var gitApi = GitApiNew("Test", "", "https://api.github.com", "", "", "", &repoList)
+
 	// Setup endpoint
 	gitApi.In.Endpoint = "repositories"
 	// Setup Github header
 	gitApi.HeaderGithub()
-	gitApi.In.UrlValInit()
-	//gitApi.In.UrlVal.Add("per_page", "75")
 
 	// Get request
 	success := gitApi.Get()
