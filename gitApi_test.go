@@ -22,15 +22,15 @@ func TestGetGithubRepository(t *testing.T) {
 	var gitApi = GitApiNew("Test", "", "https://api.github.com", "", "", "", &repoList)
 
 	// Setup endpoint
-	gitApi.In.Endpoint = "repositories"
+	gitApi.Req.Endpoint = "repositories"
 	// Setup Github header
 	gitApi.HeaderGithub()
 
 	// Get request
-	success := gitApi.Get()
-	helper.Report(gitApi.Out.Output, "List", true, false)
-	helper.Report(gitApi.Out.Url, "Url", true, false)
-	helper.Report(gitApi.Out.Url.String(), "", true, false)
+	success := gitApi.Get().Res.Ok()
+	helper.Report(gitApi.Res.Output, "List", true, false)
+	helper.Report(gitApi.Res.Url, "Url", true, false)
+	helper.Report(gitApi.Res.Url.String(), "", true, false)
 	helper.Report(len(repoList), "Count", true, true)
 
 	if !success {

@@ -33,7 +33,7 @@ import (
 )
 
 // GitApi http input structure
-type GitApiIn struct {
+type GitApiReq struct {
 	Data       string       `json:"Data"`       // Json marshaled Info
 	Entrypoint string       `json:"Entrypoint"` // Api base url
 	Endpoint   string       `json:"Endpoint"`   // Api endpoint
@@ -44,20 +44,19 @@ type GitApiIn struct {
 }
 
 // GitApi http output structure
-type GitApiOut struct {
-	Body    *[]byte      `json:"Body"`
-	Err     string       `json:"Err"`
-	Header  *http.Header `json:"Header"`  // Http response header
-	Url     *url.URL     `json:"Url"`     // In.Uri + In.Endpoint
-	Output  *string      `json:"Output"`  // Api response body in string
-	Status  string       `json:"Status"`  // Http response status
-	Success bool         `json:"Success"` // Set to true if status code 2xx
+type GitApiRes struct {
+	Body   *[]byte      `json:"Body"`
+	Err    string       `json:"Err"`
+	Header *http.Header `json:"Header"` // Http response header
+	Url    *url.URL     `json:"Url"`    // In.Uri + In.Endpoint
+	Output *string      `json:"Output"` // Api response body in string
+	Status string       `json:"Status"` // Http response status
 }
 
 // GitApi
 type GitApi struct {
-	In     GitApiIn   `json:"In"`     // Api http input
-	Out    GitApiOut  `json:"Out"`    // Api http output
+	Req    GitApiReq  `json:"In"`     // Api http input
+	Res    GitApiRes  `json:"Out"`    // Api http output
 	Name   string     `json:"Name"`   // Name of connection
 	User   string     `json:"User"`   // Api username
 	Vendor string     `json:"Vendor"` // github/gitea
@@ -80,168 +79,179 @@ func GitApiNew(
 	self.Vendor = vendor
 	self.Repo = repo
 	self.Info = info
-	self.In.Entrypoint = entrypoint
-	self.In.Token = token
+	self.Req.Entrypoint = entrypoint
+	self.Req.Token = token
 	return &self
 }
 
 // Initialize endpoint /user/repos
-func (self *GitApi) EndpointUserRepos() {
-	self.In.Endpoint = "/user/repos"
+func (self *GitApi) EndpointUserRepos() *GitApi {
+	self.Req.Endpoint = "/user/repos"
+	return self
 }
 
 // Initialize endpoint /repos/OWNER/REPO
 //
 // Use current directory if GitApi.Repo is empty
-func (self *GitApi) EndpointRepos() {
-	self.In.Endpoint = path.Join("repos", self.User, self.Repo)
+func (self *GitApi) EndpointRepos() *GitApi {
+	self.Req.Endpoint = path.Join("repos", self.User, self.Repo)
+	return self
 }
 
 // Initialize endpoint /repos/OWNER/REPO/topics
-func (self *GitApi) EndpointReposTopics() {
+func (self *GitApi) EndpointReposTopics() *GitApi {
 	self.EndpointRepos()
-	self.In.Endpoint = path.Join(self.In.Endpoint, "topics")
+	self.Req.Endpoint = path.Join(self.Req.Endpoint, "topics")
+	return self
 }
 
 // Initialize endpoint /repos/OWNER/REPO/actions/secrets
-func (self *GitApi) EndpointReposSecrets() {
+func (self *GitApi) EndpointReposSecrets() *GitApi {
 	self.EndpointRepos()
-	self.In.Endpoint = path.Join(self.In.Endpoint, "actions", "secrets")
+	self.Req.Endpoint = path.Join(self.Req.Endpoint, "actions", "secrets")
+	return self
 }
 
 // Initialize endpoint /repos/OWNER/REPO/actions/secrets/public-key
-func (self *GitApi) EndpointReposSecretsPubkey() {
+func (self *GitApi) EndpointReposSecretsPubkey() *GitApi {
 	self.EndpointReposSecrets()
-	self.In.Endpoint = path.Join(self.In.Endpoint, "public-key")
+	self.Req.Endpoint = path.Join(self.Req.Endpoint, "public-key")
+	return self
 }
 
 // Set github/gitea header
-func (self *GitApi) HeaderGithub() {
+//
+// GitApi.Req.Token, if empty, authorizeation header will not be set.
+func (self *GitApi) HeaderGithub() *GitApi {
 	header := make(http.Header)
-	self.In.Header = &header
-	self.In.Header.Add("Accept", "application/vnd.github.v3+json")
-	self.In.Header.Add("Content-Type", "application/json")
-	if len(self.In.Token) > 0 {
-		self.In.Header.Add("Authorization", "token "+self.In.Token)
+	self.Req.Header = &header
+	self.Req.Header.Add("Accept", "application/vnd.github.v3+json")
+	self.Req.Header.Add("Content-Type", "application/json")
+	if self.Req.Token != "" {
+		self.Req.Header.Add("Authorization", "token "+self.Req.Token)
 	}
+	return self
 }
 
 // Setup empty API header
-func (self *GitApi) HeaderInit() {
+func (self *GitApi) HeaderInit() *GitApi {
 	header := make(http.Header)
-	self.In.Header = &header
+	self.Req.Header = &header
+	return self
 }
 
-// Setup empty API url values
-func (self *GitApiIn) UrlValInit() {
-	urlVal := make(url.Values)
-	self.UrlVal = &urlVal
-}
-
-//	Execute http request using info in GitApi.In. Then put response info in GitApi.Out.
-//
-//	GitApi.In.Token, if empty, authorizeation header will not be set.
+// Execute http request using info in GitApi.Req. Then put response info in GitApi.Res.
 //
 //	GitApi.Info, if not nil, will be
 //			- auto marshaled for send other than "GET"
 //			- auto unmarshaled from http response body
-func (self *GitApi) Do() bool {
+func (self *GitApi) Do() *GitApi {
 	// Prepare Api Data
-	if self.In.Method != http.MethodGet {
+	if self.Req.Method != http.MethodGet {
 		j, _ := json.Marshal(&self.Info)
-		self.In.Data = string(j)
+		self.Req.Data = string(j)
 	}
 	// Prepare url
-	self.Out.Url, _ = url.Parse(self.In.Entrypoint)
-	self.Out.Url.Path = path.Join(self.Out.Url.Path, self.In.Endpoint)
-	if self.In.UrlVal != nil {
-		self.Out.Url.RawQuery = self.In.UrlVal.Encode()
+	self.Res.Url, _ = url.Parse(self.Req.Entrypoint)
+	self.Res.Url.Path = path.Join(self.Res.Url.Path, self.Req.Endpoint)
+	if self.Req.UrlVal != nil {
+		self.Res.Url.RawQuery = self.Req.UrlVal.Encode()
 	}
 	// Prepare request
-	dataBufferP := bytes.NewBufferString(self.In.Data)
+	dataBufferP := bytes.NewBufferString(self.Req.Data)
 	req, err := http.NewRequest(
-		self.In.Method,
-		self.Out.Url.String(),
+		self.Req.Method,
+		self.Res.Url.String(),
 		dataBufferP)
 	if err != nil {
-		self.Out.Err = err.Error()
+		self.Res.Err = err.Error()
 	}
 	// Set request headers
-	req.Header = *self.In.Header
+	req.Header = *self.Req.Header
 	// Request
 	client := http.DefaultClient
 	res, err := client.Do(req)
 	if err != nil {
-		self.Out.Err = err.Error()
+		self.Res.Err = err.Error()
 	}
 	// Response
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		self.Out.Err = err.Error()
+		self.Res.Err = err.Error()
 	}
 	res.Body.Close()
 	// Fill in self.Out
-	self.Out.Body = &body
-	self.Out.Header = &res.Header
-	self.Out.Status = res.Status
-	// if http status code == 2XX
-	self.Out.Success = (self.Out.Status[0] == '2')
+	self.Res.Body = &body
+	self.Res.Header = &res.Header
+	self.Res.Status = res.Status
 
 	// Unmarshal
 	self.ProcessOutput()
 
 	helper.ReportDebug(&self, "api", false, false)
 
-	return self.Out.Success
+	return self
 }
 
 // GitApi Get action wrapper
-func (self *GitApi) Get() bool {
-	self.In.Method = http.MethodGet
+func (self *GitApi) Get() *GitApi {
+	self.Req.Method = http.MethodGet
 	return self.Do()
 }
 
 // GitApi Del action wrapper
-func (self *GitApi) Del() bool {
-	self.In.Method = http.MethodDelete
+func (self *GitApi) Del() *GitApi {
+	self.Req.Method = http.MethodDelete
 	return self.Do()
 }
 
 // GitApi Patch action wrapper
-func (self *GitApi) Patch() bool {
-	self.In.Method = http.MethodPatch
+func (self *GitApi) Patch() *GitApi {
+	self.Req.Method = http.MethodPatch
 	return self.Do()
 }
 
 // GitApi Post action wrapper
-func (self *GitApi) Post() bool {
-	self.In.Method = http.MethodPost
+func (self *GitApi) Post() *GitApi {
+	self.Req.Method = http.MethodPost
 	return self.Do()
 }
 
 // GitApi Put action wrapper
-func (self *GitApi) Put() bool {
-	self.In.Method = http.MethodPut
+func (self *GitApi) Put() *GitApi {
+	self.Req.Method = http.MethodPut
 	return self.Do()
 }
 
 // Print both Body and Err into string pointer
-func (self *GitApi) ProcessOutput() {
+func (self *GitApi) ProcessOutput() *GitApi {
 	// Unmarshal
-	err := json.Unmarshal(*self.Out.Body, self.Info)
-	if self.Out.Success && err == nil && self.Info != nil {
+	err := json.Unmarshal(*self.Res.Body, self.Info)
+	if self.Res.Ok() && err == nil && self.Info != nil {
 		// Use Info string func
-		self.Out.Output = self.Info.StringP()
+		self.Res.Output = self.Info.StringP()
 	} else {
 		var output string
-		strP := helper.ReportSp(self.Out.Body, "", true, false)
+		strP := helper.ReportSp(self.Res.Body, "", true, false)
 		if strP != nil {
 			output += *strP
 		}
-		strP = helper.ReportSp(self.Out.Err, "", true, false)
+		strP = helper.ReportSp(self.Res.Err, "", true, false)
 		if strP != nil {
 			output += *strP
 		}
-		self.Out.Output = &output
+		self.Res.Output = &output
 	}
+	return self
+}
+
+// Setup empty API url values
+func (self *GitApiReq) UrlValInit() {
+	urlVal := make(url.Values)
+	self.UrlVal = &urlVal
+}
+
+// Check response status == 2xx
+func (self *GitApiRes) Ok() bool {
+	return self.Status != "" && self.Status[0] == '2'
 }
