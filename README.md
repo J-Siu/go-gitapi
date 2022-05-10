@@ -65,13 +65,13 @@ Following is code to create a new repository:
     // Setup Github header
     gitApi.HeaderGithub()
     // Do post request
-    success := gitApi.Post()
+    success := gitApi.Post().Res.Ok()
     ```
 
 3. Print out using helper function
     ```go
     helper.ReportStatus(success, gitApi.Name)
-    helper.ReportStatus(gitApi.Output, gitApi.Name)
+    helper.ReportStatus(gitApi.Res.Output, gitApi.Name)
     ```
 
 #### Debug
@@ -81,6 +81,9 @@ Enable debug
 helper.Debug = true
 ```
 
+### Used By Project
+
+- [go-mygit](https://github.com/J-Siu/go-mygit)
 ### Repository
 
 - [go-gitapi](https://github.com/J-Siu/go-gitapi)
@@ -112,6 +115,13 @@ helper.Debug = true
     - Add UrlVal(url.Values)
 - v1.2.6
   - Update go-helper package for bug fix
+- v1.3.0
+  - All GitApi methods reutrn self pointer
+  - Interface GitApiInfo remove type restrictions
+  - Member GitApi.In -> GitApi.Req
+  - Member GitApi.Out -> GitApi.Res
+  - Type GitApiIn -> GitApiReq
+  - Type GitApiOut -> GitApiRes
 
 ### License
 
