@@ -3,6 +3,7 @@ package gitapi
 import (
 	"testing"
 
+	"github.com/J-Siu/go-gitapi"
 	"github.com/J-Siu/go-helper"
 )
 
@@ -10,7 +11,7 @@ func TestGetGithubRepository(t *testing.T) {
 
 	// helper.Debug = true
 
-	var repoList RepoInfoList
+	var repoList gitapi.RepoInfoList
 
 	// var gitApi = &GitApi{
 	// 	Name: "Test",
@@ -19,7 +20,7 @@ func TestGetGithubRepository(t *testing.T) {
 	// 		Entrypoint: "https://api.github.com",
 	// 	},
 	// }
-	var gitApi = GitApiNew("Test", "", "https://api.github.com", "", "", "", &repoList)
+	var gitApi = gitapi.GitApiNew("Test", "", "https://api.github.com", "", "", "", &repoList)
 
 	// Setup endpoint
 	gitApi.Req.Endpoint = "repositories"
