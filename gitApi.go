@@ -147,7 +147,7 @@ func (self *GitApi) HeaderInit() *GitApi {
 //			- auto unmarshaled from http response body
 func (self *GitApi) Do() *GitApi {
 	// Prepare Api Data
-	if self.Req.Method != http.MethodGet {
+	if self.Req.Method != http.MethodGet && self.Info != nil {
 		j, _ := json.Marshal(&self.Info)
 		self.Req.Data = string(j)
 	}
