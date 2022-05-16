@@ -1,5 +1,8 @@
-## go-gitapi - A github/gitea api library in golang
+# go-gitapi  [![Paypal donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?business=HZF49NM9D35SJ&no_recurring=0&currency_code=CAD)
 
+Golang Github/Gitea api library.
+
+### Table Of Content
 <!-- TOC -->
 
 - [Features](#features)
