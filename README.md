@@ -5,6 +5,7 @@ Golang Github/Gitea api library.
 ### Table Of Content
 <!-- TOC -->
 
+- [Table Of Content](#table-of-content)
 - [Features](#features)
   - [gitApi.go](#gitapigo)
   - [gitApiDataStruct.go](#gitapidatastructgo)
@@ -187,6 +188,8 @@ helper.Debug = true
   - Type GitApiOut -> GitApiRes
 - v1.3.1
   - Improve README.md
+- v1.3.2
+  - Fix `GitApi.Do()` wiping `GitApi.Req.Data` if `GitApi.Info` is `nil`
 
 ### License
 
