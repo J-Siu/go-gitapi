@@ -121,7 +121,7 @@ func (self *GitApi) EndpointReposSecretsPubkey() *GitApi {
 
 // Set github/gitea header
 //
-// GitApi.Req.Token, if empty, authorizeation header will not be set.
+// GitApi.Req.Token, if empty, authorization header will not be set.
 func (self *GitApi) HeaderGithub() *GitApi {
 	header := make(http.Header)
 	self.Req.Header = &header
@@ -143,8 +143,8 @@ func (self *GitApi) HeaderInit() *GitApi {
 // Execute http request using info in GitApi.Req. Then put response info in GitApi.Res.
 //
 //	GitApi.Info, if not nil, will be
-//			- auto marshaled for send other than "GET"
-//			- auto unmarshaled from http response body
+//			- auto marshal for send other than "GET"
+//			- auto unmarshal from http response body
 func (self *GitApi) Do() *GitApi {
 	// Prepare Api Data
 	if self.Req.Method != http.MethodGet && self.Info != nil {
