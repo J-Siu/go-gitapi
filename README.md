@@ -22,7 +22,7 @@ Golang Github/Gitea api library.
 - [License](#license)
 
 <!-- /TOC -->
-
+<!--more-->
 ### Features
 
 - API action
