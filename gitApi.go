@@ -173,17 +173,18 @@ func (self *GitApi) Do() *GitApi {
 	res, err := client.Do(req)
 	if err != nil {
 		self.Res.Err = err.Error()
+	} else {
+		// Response
+		body, err := io.ReadAll(res.Body)
+		if err != nil {
+			self.Res.Err = err.Error()
+		}
+		res.Body.Close()
+		// Fill in self.Out
+		self.Res.Body = &body
+		self.Res.Header = &res.Header
+		self.Res.Status = res.Status
 	}
-	// Response
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		self.Res.Err = err.Error()
-	}
-	res.Body.Close()
-	// Fill in self.Out
-	self.Res.Body = &body
-	self.Res.Header = &res.Header
-	self.Res.Status = res.Status
 
 	// Unmarshal
 	self.ProcessOutput()
@@ -226,10 +227,12 @@ func (self *GitApi) Put() *GitApi {
 // Print both Body and Err into string pointer
 func (self *GitApi) ProcessOutput() *GitApi {
 	// Unmarshal
-	err := json.Unmarshal(*self.Res.Body, self.Info)
-	if self.Res.Ok() && err == nil && self.Info != nil {
-		// Use Info string func
-		self.Res.Output = self.Info.StringP()
+	if self.Res.Err == "" {
+		err := json.Unmarshal(*self.Res.Body, self.Info)
+		if self.Res.Ok() && err == nil && self.Info != nil {
+			// Use Info string func
+			self.Res.Output = self.Info.StringP()
+		}
 	} else {
 		var output string
 		strP := helper.ReportSp(self.Res.Body, "", true, false)
