@@ -190,12 +190,16 @@ helper.Debug = true
   - Improve README.md
 - v1.3.2
   - Fix `GitApi.Do()` wiping `GitApi.Req.Data` if `GitApi.Info` is `nil`
-
+- v1.4.0
+  - upgrade helper to 1.1.6
+  - `GitApi` struct and `GitApiMew()`
+    - add `SkipVerify` to support self-signed cert
+  
 ### License
 
 The MIT License (MIT)
 
-Copyright © 2022 John, Sing Dao, Siu <john.sd.siu@gmail.com>
+Copyright © 2023 John, Sing Dao, Siu <john.sd.siu@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
