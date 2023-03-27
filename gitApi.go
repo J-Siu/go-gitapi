@@ -23,6 +23,7 @@ package gitapi
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -55,13 +56,14 @@ type GitApiRes struct {
 
 // GitApi
 type GitApi struct {
-	Req    GitApiReq  `json:"In"`     // Api http input
-	Res    GitApiRes  `json:"Out"`    // Api http output
-	Name   string     `json:"Name"`   // Name of connection
-	User   string     `json:"User"`   // Api username
-	Vendor string     `json:"Vendor"` // github/gitea
-	Repo   string     `json:"Repo"`   // Repository name
-	Info   GitApiInfo `json:"Info"`   // Pointer to structure. Use NilType.Nil() for nil pointer
+	Req        GitApiReq  `json:"In"`         // Api http input
+	Res        GitApiRes  `json:"Out"`        // Api http output
+	Name       string     `json:"Name"`       // Name of connection
+	User       string     `json:"User"`       // Api username
+	Vendor     string     `json:"Vendor"`     // github/gitea
+	SkipVerify bool       `json:"skipverify"` // Api request skip cert verify (allow self-signed cert)
+	Repo       string     `json:"Repo"`       // Repository name
+	Info       GitApiInfo `json:"Info"`       // Pointer to structure. Use NilType.Nil() for nil pointer
 }
 
 // Setup a *GitApi
@@ -71,12 +73,14 @@ func GitApiNew(
 	entrypoint string,
 	user string,
 	vendor string,
+	skipverify bool,
 	repo string,
 	info GitApiInfo) *GitApi {
 	var self GitApi
 	self.Name = name
 	self.User = user
 	self.Vendor = vendor
+	self.SkipVerify = skipverify
 	self.Repo = repo
 	self.Info = info
 	self.Req.Entrypoint = entrypoint
@@ -169,7 +173,12 @@ func (self *GitApi) Do() *GitApi {
 	// Set request headers
 	req.Header = *self.Req.Header
 	// Request
-	client := http.DefaultClient
+	// - Configure transport
+	transport := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: self.SkipVerify},
+	}
+
+	client := &http.Client{Transport: transport}
 	res, err := client.Do(req)
 	if err != nil {
 		self.Res.Err = err.Error()

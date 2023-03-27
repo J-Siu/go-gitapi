@@ -20,7 +20,7 @@ func TestGetGithubRepository(t *testing.T) {
 	// 		Entrypoint: "https://api.github.com",
 	// 	},
 	// }
-	var gitApi = gitapi.GitApiNew("Test", "", "https://api.github.com", "", "", "", &repoList)
+	var gitApi = gitapi.GitApiNew("Test", "", "https://api.github.com", "", "", false, "", &repoList)
 
 	// Setup endpoint
 	gitApi.Req.Endpoint = "repositories"
