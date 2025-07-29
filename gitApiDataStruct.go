@@ -1,5 +1,7 @@
 /*
-Copyright © 2022 John, Sing Dao, Siu <john.sd.siu@gmail.com>
+The MIT License (MIT)
+
+Copyright © 2025 John, Sing Dao, Siu <john.sd.siu@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,15 +32,15 @@ type RepoEncryptedPair struct {
 	Key_id          string `json:"key_id"`          // Public key id
 }
 
-func (self *RepoEncryptedPair) StringP() *string {
+func (rEncryptedPair *RepoEncryptedPair) StringP() *string {
 	var str string
-	str += "Value:" + self.Encrypted_value + "\n"
-	str += "Key ID:" + self.Key_id + "\n"
+	str += "Value:" + rEncryptedPair.Encrypted_value + "\n"
+	str += "Key ID:" + rEncryptedPair.Key_id + "\n"
 	return &str
 }
 
-func (self *RepoEncryptedPair) String() string {
-	return *self.StringP()
+func (rEncryptedPair *RepoEncryptedPair) String() string {
+	return *rEncryptedPair.StringP()
 }
 
 // Github repository public key structure
@@ -47,15 +49,15 @@ type RepoPublicKey struct {
 	Key    string `json:"key"`
 }
 
-func (self *RepoPublicKey) StringP() *string {
+func (rPKey *RepoPublicKey) StringP() *string {
 	var str string
-	str += "Key:" + self.Key + "\n"
-	str += "Key ID:" + self.Key_id + "\n"
+	str += "Key:" + rPKey.Key + "\n"
+	str += "Key ID:" + rPKey.Key_id + "\n"
 	return &str
 }
 
-func (self *RepoPublicKey) String() string {
-	return *self.StringP()
+func (rPKey *RepoPublicKey) String() string {
+	return *rPKey.StringP()
 }
 
 // Github repository private structure
@@ -63,14 +65,14 @@ type RepoPrivate struct {
 	Private bool `json:"private"`
 }
 
-func (self *RepoPrivate) StringP() *string {
+func (rPrivate *RepoPrivate) StringP() *string {
 	var str string
-	str += helper.BoolString(self.Private)
+	str += helper.BoolString(rPrivate.Private)
 	return &str
 }
 
-func (self *RepoPrivate) String() string {
-	return *self.StringP()
+func (rPrivate *RepoPrivate) String() string {
+	return *rPrivate.StringP()
 }
 
 // Github repository visibility structure
@@ -78,12 +80,12 @@ type RepoVisibility struct {
 	Visibility string `json:"visibility"`
 }
 
-func (self *RepoVisibility) StringP() *string {
-	return &self.Visibility
+func (rVisibility *RepoVisibility) StringP() *string {
+	return &rVisibility.Visibility
 }
 
-func (self *RepoVisibility) String() string {
-	return *self.StringP()
+func (rVisibility *RepoVisibility) String() string {
+	return *rVisibility.StringP()
 }
 
 // Github repository description structure
@@ -91,12 +93,12 @@ type RepoDescription struct {
 	Description string `json:"description"`
 }
 
-func (self *RepoDescription) StringP() *string {
-	return &self.Description
+func (rDesc *RepoDescription) StringP() *string {
+	return &rDesc.Description
 }
 
-func (self *RepoDescription) String() string {
-	return *self.StringP()
+func (rDesc *RepoDescription) String() string {
+	return *rDesc.StringP()
 }
 
 // Github repository topics structure
@@ -105,25 +107,25 @@ type RepoTopics struct {
 	Names  *[]string `json:"names"`  // Gitea topics is "Names"
 }
 
-func (self *RepoTopics) StringP() *string {
+func (rTopics *RepoTopics) StringP() *string {
 	var str string
 	// Gitea
-	if self.Names != nil {
-		for _, t := range *self.Names {
+	if rTopics.Names != nil {
+		for _, t := range *rTopics.Names {
 			str += t + "\n"
 		}
 	}
 	// Github
-	if self.Topics != nil {
-		for _, t := range *self.Topics {
+	if rTopics.Topics != nil {
+		for _, t := range *rTopics.Topics {
 			str += t + "\n"
 		}
 	}
 	return &str
 }
 
-func (self *RepoTopics) String() string {
-	return *self.StringP()
+func (rTopics *RepoTopics) String() string {
+	return *rTopics.StringP()
 }
 
 // Github repository(creation) info structure
@@ -132,29 +134,28 @@ type RepoInfo struct {
 	Private bool   `json:"private"`
 }
 
-func (self *RepoInfo) StringP() *string {
-	var str string
-	str = self.Name + " (private:" + helper.BoolString(self.Private) + ")"
+func (rInfo *RepoInfo) StringP() *string {
+	str := rInfo.Name + " (private:" + helper.BoolString(rInfo.Private) + ")"
 	return &str
 }
 
-func (self *RepoInfo) String() string {
-	return *self.StringP()
+func (rInfo *RepoInfo) String() string {
+	return *rInfo.StringP()
 }
 
 // Github repository(creation) info array
 type RepoInfoList []RepoInfo
 
-func (self *RepoInfoList) StringP() *string {
+func (rInfoList *RepoInfoList) StringP() *string {
 	var str string
-	for _, i := range *self {
+	for _, i := range *rInfoList {
 		str += *i.StringP() + "\n"
 	}
 	return &str
 }
 
-func (self *RepoInfoList) String() string {
-	return *self.StringP()
+func (rInfoList *RepoInfoList) String() string {
+	return *rInfoList.StringP()
 }
 
 // This is used as a dummy type for nil GitApiInfo parameter
@@ -162,11 +163,11 @@ type NilType struct {
 	Nil *byte // Dummy pointer
 }
 
-func (self *NilType) StringP() *string {
+func (nilT *NilType) StringP() *string {
 	return nil
 }
 
-func (self *NilType) String() string {
+func (nilT *NilType) String() string {
 	return "Null"
 }
 
