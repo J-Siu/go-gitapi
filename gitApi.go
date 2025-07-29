@@ -1,5 +1,7 @@
 /*
-Copyright © 2022 John, Sing Dao, Siu <john.sd.siu@gmail.com>
+The MIT License (MIT)
+
+Copyright © 2025 John, Sing Dao, Siu <john.sd.siu@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -89,59 +91,59 @@ func GitApiNew(
 }
 
 // Initialize endpoint /user/repos
-func (self *GitApi) EndpointUserRepos() *GitApi {
-	self.Req.Endpoint = "/user/repos"
-	return self
+func (ga *GitApi) EndpointUserRepos() *GitApi {
+	ga.Req.Endpoint = "/user/repos"
+	return ga
 }
 
 // Initialize endpoint /repos/OWNER/REPO
 //
 // Use current directory if GitApi.Repo is empty
-func (self *GitApi) EndpointRepos() *GitApi {
-	self.Req.Endpoint = path.Join("repos", self.User, self.Repo)
-	return self
+func (ga *GitApi) EndpointRepos() *GitApi {
+	ga.Req.Endpoint = path.Join("repos", ga.User, ga.Repo)
+	return ga
 }
 
 // Initialize endpoint /repos/OWNER/REPO/topics
-func (self *GitApi) EndpointReposTopics() *GitApi {
-	self.EndpointRepos()
-	self.Req.Endpoint = path.Join(self.Req.Endpoint, "topics")
-	return self
+func (ga *GitApi) EndpointReposTopics() *GitApi {
+	ga.EndpointRepos()
+	ga.Req.Endpoint = path.Join(ga.Req.Endpoint, "topics")
+	return ga
 }
 
 // Initialize endpoint /repos/OWNER/REPO/actions/secrets
-func (self *GitApi) EndpointReposSecrets() *GitApi {
-	self.EndpointRepos()
-	self.Req.Endpoint = path.Join(self.Req.Endpoint, "actions", "secrets")
-	return self
+func (ga *GitApi) EndpointReposSecrets() *GitApi {
+	ga.EndpointRepos()
+	ga.Req.Endpoint = path.Join(ga.Req.Endpoint, "actions", "secrets")
+	return ga
 }
 
 // Initialize endpoint /repos/OWNER/REPO/actions/secrets/public-key
-func (self *GitApi) EndpointReposSecretsPubkey() *GitApi {
-	self.EndpointReposSecrets()
-	self.Req.Endpoint = path.Join(self.Req.Endpoint, "public-key")
-	return self
+func (ga *GitApi) EndpointReposSecretsPubkey() *GitApi {
+	ga.EndpointReposSecrets()
+	ga.Req.Endpoint = path.Join(ga.Req.Endpoint, "public-key")
+	return ga
 }
 
 // Set github/gitea header
 //
 // GitApi.Req.Token, if empty, authorization header will not be set.
-func (self *GitApi) HeaderGithub() *GitApi {
+func (ga *GitApi) HeaderGithub() *GitApi {
 	header := make(http.Header)
-	self.Req.Header = &header
-	self.Req.Header.Add("Accept", "application/vnd.github.v3+json")
-	self.Req.Header.Add("Content-Type", "application/json")
-	if self.Req.Token != "" {
-		self.Req.Header.Add("Authorization", "token "+self.Req.Token)
+	ga.Req.Header = &header
+	ga.Req.Header.Add("Accept", "application/vnd.github.v3+json")
+	ga.Req.Header.Add("Content-Type", "application/json")
+	if ga.Req.Token != "" {
+		ga.Req.Header.Add("Authorization", "token "+ga.Req.Token)
 	}
-	return self
+	return ga
 }
 
 // Setup empty API header
-func (self *GitApi) HeaderInit() *GitApi {
+func (ga *GitApi) HeaderInit() *GitApi {
 	header := make(http.Header)
-	self.Req.Header = &header
-	return self
+	ga.Req.Header = &header
+	return ga
 }
 
 // Execute http request using info in GitApi.Req. Then put response info in GitApi.Res.
@@ -149,121 +151,127 @@ func (self *GitApi) HeaderInit() *GitApi {
 //	GitApi.Info, if not nil, will be
 //			- auto marshal for send other than "GET"
 //			- auto unmarshal from http response body
-func (self *GitApi) Do() *GitApi {
+func (ga *GitApi) Do() *GitApi {
 	// Prepare Api Data
-	if self.Req.Method != http.MethodGet && self.Info != nil {
-		j, _ := json.Marshal(&self.Info)
-		self.Req.Data = string(j)
+	if ga.Req.Method != http.MethodGet && ga.Info != nil {
+		j, _ := json.Marshal(&ga.Info)
+		ga.Req.Data = string(j)
 	}
 	// Prepare url
-	self.Res.Url, _ = url.Parse(self.Req.Entrypoint)
-	self.Res.Url.Path = path.Join(self.Res.Url.Path, self.Req.Endpoint)
-	if self.Req.UrlVal != nil {
-		self.Res.Url.RawQuery = self.Req.UrlVal.Encode()
+	ga.Res.Url, _ = url.Parse(ga.Req.Entrypoint)
+	ga.Res.Url.Path = path.Join(ga.Res.Url.Path, ga.Req.Endpoint)
+	if ga.Req.UrlVal != nil {
+		ga.Res.Url.RawQuery = ga.Req.UrlVal.Encode()
 	}
 	// Prepare request
-	dataBufferP := bytes.NewBufferString(self.Req.Data)
+	dataBufferP := bytes.NewBufferString(ga.Req.Data)
 	req, err := http.NewRequest(
-		self.Req.Method,
-		self.Res.Url.String(),
+		ga.Req.Method,
+		ga.Res.Url.String(),
 		dataBufferP)
 	if err != nil {
-		self.Res.Err = err.Error()
+		ga.Res.Err = err.Error()
 	}
 	// Set request headers
-	req.Header = *self.Req.Header
+	req.Header = *ga.Req.Header
 	// Request
 	// - Configure transport
 	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: self.SkipVerify},
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: ga.SkipVerify},
 	}
 
 	client := &http.Client{Transport: transport}
 	res, err := client.Do(req)
 	if err != nil {
-		self.Res.Err = err.Error()
+		ga.Res.Err = err.Error()
 	} else {
 		// Response
 		body, err := io.ReadAll(res.Body)
 		if err != nil {
-			self.Res.Err = err.Error()
+			ga.Res.Err = err.Error()
 		}
 		res.Body.Close()
 		// Fill in self.Out
-		self.Res.Body = &body
-		self.Res.Header = &res.Header
-		self.Res.Status = res.Status
+		ga.Res.Body = &body
+		ga.Res.Header = &res.Header
+		ga.Res.Status = res.Status
 	}
 
 	// Unmarshal
-	self.ProcessOutput()
+	ga.ProcessOutput()
 
-	helper.ReportDebug(&self, "api", false, false)
+	helper.ReportDebug(&ga, "api", false, false)
+	// helper.ReportDebug(*ga.Res.Body, "api.Out.Body", false, false)
 
-	return self
+	return ga
 }
 
 // GitApi Get action wrapper
-func (self *GitApi) Get() *GitApi {
-	self.Req.Method = http.MethodGet
-	return self.Do()
+func (ga *GitApi) Get() *GitApi {
+	ga.Req.Method = http.MethodGet
+	return ga.Do()
 }
 
 // GitApi Del action wrapper
-func (self *GitApi) Del() *GitApi {
-	self.Req.Method = http.MethodDelete
-	return self.Do()
+func (ga *GitApi) Del() *GitApi {
+	ga.Req.Method = http.MethodDelete
+	return ga.Do()
 }
 
 // GitApi Patch action wrapper
-func (self *GitApi) Patch() *GitApi {
-	self.Req.Method = http.MethodPatch
-	return self.Do()
+func (ga *GitApi) Patch() *GitApi {
+	ga.Req.Method = http.MethodPatch
+	return ga.Do()
 }
 
 // GitApi Post action wrapper
-func (self *GitApi) Post() *GitApi {
-	self.Req.Method = http.MethodPost
-	return self.Do()
+func (ga *GitApi) Post() *GitApi {
+	ga.Req.Method = http.MethodPost
+	return ga.Do()
 }
 
 // GitApi Put action wrapper
-func (self *GitApi) Put() *GitApi {
-	self.Req.Method = http.MethodPut
-	return self.Do()
+func (ga *GitApi) Put() *GitApi {
+	ga.Req.Method = http.MethodPut
+	return ga.Do()
 }
 
 // Print both Body and Err into string pointer
-func (self *GitApi) ProcessOutput() *GitApi {
+func (ga *GitApi) ProcessOutput() *GitApi {
 	// Unmarshal
-	if self.Res.Err == "" {
-		err := json.Unmarshal(*self.Res.Body, self.Info)
-		if self.Res.Ok() && err == nil && self.Info != nil {
-			// Use Info string func
-			self.Res.Output = self.Info.StringP()
+	if ga.Res.Err == "" {
+		if ga.Info == Nil() {
+			tmpStr := string(*ga.Res.Body)
+			ga.Res.Output = &tmpStr
+		} else {
+			err := json.Unmarshal(*ga.Res.Body, ga.Info)
+			if ga.Res.Ok() && err == nil && ga.Info != nil {
+				// Use Info string func
+				ga.Res.Output = ga.Info.StringP()
+			}
 		}
 	} else {
 		var output string
-		strP := helper.ReportSp(self.Res.Body, "", true, false)
+		strP := helper.ReportSp(ga.Res.Body, "", true, false)
 		if strP != nil {
 			output += *strP
 		}
-		strP = helper.ReportSp(self.Res.Err, "", true, false)
+		strP = helper.ReportSp(ga.Res.Err, "", true, false)
 		if strP != nil {
 			output += *strP
 		}
-		self.Res.Output = &output
+		ga.Res.Output = &output
 	}
-	return self
+	return ga
 }
 
 // Setup empty API url values
-func (self *GitApiReq) UrlValInit() {
+func (gaReq *GitApiReq) UrlValInit() {
 	urlVal := make(url.Values)
-	self.UrlVal = &urlVal
+	gaReq.UrlVal = &urlVal
 }
 
 // Check response status == 2xx
-func (self *GitApiRes) Ok() bool {
-	return self.Status != "" && self.Status[0] == '2'
+func (gaRes *GitApiRes) Ok() bool {
+	return gaRes.Status != "" && gaRes.Status[0] == '2'
 }
