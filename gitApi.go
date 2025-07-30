@@ -46,6 +46,12 @@ type GitApiReq struct {
 	UrlVal     *url.Values  `json:"UrlVal"`     // Api url values
 }
 
+// Setup empty API url values
+func (gaReq *GitApiReq) UrlValInit() {
+	urlVal := make(url.Values)
+	gaReq.UrlVal = &urlVal
+}
+
 // GitApi http output structure
 type GitApiRes struct {
 	Body   *[]byte      `json:"Body"`
@@ -54,6 +60,11 @@ type GitApiRes struct {
 	Url    *url.URL     `json:"Url"`    // In.Uri + In.Endpoint
 	Output *string      `json:"Output"` // Api response body in string
 	Status string       `json:"Status"` // Http response status
+}
+
+// Check response status == 2xx
+func (gaRes *GitApiRes) Ok() bool {
+	return gaRes.Status != "" && gaRes.Status[0] == '2' && gaRes.Err == ""
 }
 
 // GitApi
@@ -198,10 +209,14 @@ func (ga *GitApi) Do() *GitApi {
 	}
 
 	// Unmarshal
-	ga.ProcessOutput()
+	if ga.Res.Err == "" {
+		ga.ProcessOutput()
+	} else {
+		ga.ProcessError()
+	}
 
 	helper.ReportDebug(&ga, "api", false, false)
-	// helper.ReportDebug(*ga.Res.Body, "api.Out.Body", false, false)
+	helper.ReportDebug(ga.Res.Body, "api.Out.Body", false, false)
 
 	return ga
 }
@@ -236,11 +251,14 @@ func (ga *GitApi) Put() *GitApi {
 	return ga.Do()
 }
 
-// Print both Body and Err into string pointer
+// Print HTTP Body into string pointer
 func (ga *GitApi) ProcessOutput() *GitApi {
-	// Unmarshal
-	if ga.Res.Err == "" {
+	// Check API error
+	ga.ProcessOutputError()
+	if ga.Res.Ok() {
+		// Unmarshal
 		if ga.Info == Nil() {
+			// Return the whole JSON
 			tmpStr := string(*ga.Res.Body)
 			ga.Res.Output = &tmpStr
 		} else {
@@ -250,28 +268,39 @@ func (ga *GitApi) ProcessOutput() *GitApi {
 				ga.Res.Output = ga.Info.StringP()
 			}
 		}
-	} else {
-		var output string
-		strP := helper.ReportSp(ga.Res.Body, "", true, false)
-		if strP != nil {
-			output += *strP
-		}
-		strP = helper.ReportSp(ga.Res.Err, "", true, false)
-		if strP != nil {
-			output += *strP
-		}
-		ga.Res.Output = &output
 	}
 	return ga
 }
 
-// Setup empty API url values
-func (gaReq *GitApiReq) UrlValInit() {
-	urlVal := make(url.Values)
-	gaReq.UrlVal = &urlVal
+// Print HTTP Body into string pointer
+func (ga *GitApi) ProcessOutputError() *GitApi {
+	var e RepoError
+	err := json.Unmarshal(*ga.Res.Body, &e)
+	if err == nil {
+		// Use Info string func
+		if e.Message != "" {
+			ga.Res.Err = e.String()
+		}
+	} else {
+		ga.Res.Err = err.Error()
+
+	}
+	return ga
 }
 
-// Check response status == 2xx
-func (gaRes *GitApiRes) Ok() bool {
-	return gaRes.Status != "" && gaRes.Status[0] == '2'
+// Print HTTP Body Err into string pointer
+func (ga *GitApi) ProcessError() *GitApi {
+	helper.ReportDebug(*ga.Res.Body, "api.Out.Body", false, false)
+	// Unmarshal
+	var output string
+	strP := helper.ReportSp(ga.Res.Body, "", true, false)
+	if strP != nil {
+		output += *strP
+	}
+	strP = helper.ReportSp(ga.Res.Err, "", true, false)
+	if strP != nil {
+		output += *strP
+	}
+	ga.Res.Output = &output
+	return ga
 }
