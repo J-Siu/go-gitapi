@@ -35,53 +35,66 @@ Golang Github/Gitea api library.
 
 #### gitApi.go
 - type GitApiReq struct
+- func (gaReq *GitApiReq) UrlValInit()
 - type GitApiRes struct
+- func (gaRes *GitApiRes) Ok() bool
 - type GitApi struct
 - func GitApiNew(
-- func (self *GitApi) EndpointUserRepos() *GitApi
-- func (self *GitApi) EndpointRepos() *GitApi
-- func (self *GitApi) EndpointReposTopics() *GitApi
-- func (self *GitApi) EndpointReposSecrets() *GitApi
-- func (self *GitApi) EndpointReposSecretsPubkey() *GitApi
-- func (self *GitApi) HeaderGithub() *GitApi
-- func (self *GitApi) HeaderInit() *GitApi
-- func (self *GitApi) Do() *GitApi
-- func (self *GitApi) Get() *GitApi
-- func (self *GitApi) Del() *GitApi
-- func (self *GitApi) Patch() *GitApi
-- func (self *GitApi) Post() *GitApi
-- func (self *GitApi) Put() *GitApi
-- func (self *GitApi) ProcessOutput() *GitApi
-- func (self *GitApiReq) UrlValInit()
-- func (self *GitApiRes) Ok() bool
+- func (ga *GitApi) Ok() bool
+- func (ga *GitApi) Output() *string
+- func (ga *GitApi) Err() *string
+- func (ga *GitApi) EndpointUserRepos() *GitApi
+- func (ga *GitApi) EndpointRepos() *GitApi
+- func (ga *GitApi) EndpointReposTopics() *GitApi
+- func (ga *GitApi) EndpointReposSecrets() *GitApi
+- func (ga *GitApi) EndpointReposSecretsPubkey() *GitApi
+- func (ga *GitApi) HeaderGithub() *GitApi
+- func (ga *GitApi) HeaderInit() *GitApi
+- func (ga *GitApi) Do() *GitApi
+- func (ga *GitApi) Get() *GitApi
+- func (ga *GitApi) Del() *GitApi
+- func (ga *GitApi) Patch() *GitApi
+- func (ga *GitApi) Post() *GitApi
+- func (ga *GitApi) Put() *GitApi
+- func (ga *GitApi) SetGet() *GitApi
+- func (ga *GitApi) SetDel() *GitApi
+- func (ga *GitApi) SetPatch() *GitApi
+- func (ga *GitApi) SetPost() *GitApi
+- func (ga *GitApi) SetPut() *GitApi
+- func (ga *GitApi) ProcessOutput() *GitApi
+- func (ga *GitApi) ProcessOutputError() *GitApi
+- func (ga *GitApi) ProcessError() *GitApi
 #### gitApiDataStruct.go
 - type RepoEncryptedPair struct
-- func (self *RepoEncryptedPair) StringP() *string
-- func (self *RepoEncryptedPair) String() string
+- func (rEncryptedPair *RepoEncryptedPair) StringP() *string
+- func (rEncryptedPair *RepoEncryptedPair) String() string
 - type RepoPublicKey struct
-- func (self *RepoPublicKey) StringP() *string
-- func (self *RepoPublicKey) String() string
+- func (rPKey *RepoPublicKey) StringP() *string
+- func (rPKey *RepoPublicKey) String() string
 - type RepoPrivate struct
-- func (self *RepoPrivate) StringP() *string
-- func (self *RepoPrivate) String() string
+- func (rPrivate *RepoPrivate) StringP() *string
+- func (rPrivate *RepoPrivate) String() string
 - type RepoVisibility struct
-- func (self *RepoVisibility) StringP() *string
-- func (self *RepoVisibility) String() string
+- func (rVisibility *RepoVisibility) StringP() *string
+- func (rVisibility *RepoVisibility) String() string
 - type RepoDescription struct
-- func (self *RepoDescription) StringP() *string
-- func (self *RepoDescription) String() string
+- func (rDesc *RepoDescription) StringP() *string
+- func (rDesc *RepoDescription) String() string
 - type RepoTopics struct
-- func (self *RepoTopics) StringP() *string
-- func (self *RepoTopics) String() string
+- func (rTopics *RepoTopics) StringP() *string
+- func (rTopics *RepoTopics) String() string
 - type RepoInfo struct
-- func (self *RepoInfo) StringP() *string
-- func (self *RepoInfo) String() string
+- func (rInfo *RepoInfo) StringP() *string
+- func (rInfo *RepoInfo) String() string
+- type RepoError struct
+- func (rError *RepoError) StringP() *string
+- func (rError *RepoError) String() string
 - type RepoInfoList []RepoInfo
-- func (self *RepoInfoList) StringP() *string
-- func (self *RepoInfoList) String() string
+- func (rInfoList *RepoInfoList) StringP() *string
+- func (rInfoList *RepoInfoList) String() string
 - type NilType struct
-- func (self *NilType) StringP() *string
-- func (self *NilType) String() string
+- func (nilT *NilType) StringP() *string
+- func (nilT *NilType) String() string
 - func Nil() *NilType
 - type GitApiInfo interface
 
@@ -121,21 +134,23 @@ Following is code to create a new repository:
       "Test",   // Connection name for debug print out purpose
       "01234567890123456789012345678912", // API token,
       "https://api.github.com", // API entrypoint
-      "J-Siu",  // user
+      "User",  // user
       "github", // vendor/brand
       &info)    // data for request
     // Setup endpoint
     gitApi.EndpointRepos()
     // Setup Github header
     gitApi.HeaderGithub()
-    // Do post request
-    success := gitApi.Post().Res.Ok()
+    // Set http method: Post
+    gitApi.SetPost()
+    // Do request
+    success := gitApi.Do().Ok()
     ```
 
 3. Print out using helper function
     ```go
-    helper.ReportStatus(success, gitApi.Name)
-    helper.ReportStatus(gitApi.Res.Output, gitApi.Name)
+    helper.ReportStatus(success, gitApi.Name, false, true)
+    helper.Report(gitApi.Output(), gitApi.Name, false, true)
     ```
 
 #### Debug
@@ -205,7 +220,7 @@ helper.Debug = true
   - gitApi.go
     - Move Method(http) from GitApiReq -> GitApi
     - GitApi struct
-      - Add SetGet(), Set(), SetDel(), SetPatch(), SetPost(), SetPut()
+      - Add SetGet(), SetDel(), SetPatch(), SetPost(), SetPut()
       - Add .Res wrapper func Err(), Ok(), Output()
 
 ### License
