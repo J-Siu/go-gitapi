@@ -37,12 +37,12 @@ import (
 
 // GitApi http input structure
 type GitApiReq struct {
-	Data       string       `json:"Data"`       // Json marshaled Info
 	Entrypoint string       `json:"Entrypoint"` // Api base url
 	Endpoint   string       `json:"Endpoint"`   // Api endpoint
-	Header     *http.Header `json:"Header"`     // Http request header
 	Token      string       `json:"Token"`      // Api auth token
+	Header     *http.Header `json:"Header"`     // Http request header
 	UrlVal     *url.Values  `json:"UrlVal"`     // Api url values
+	Data       string       `json:"Data"`       // Json marshaled Info
 }
 
 // Setup empty API url values
@@ -53,12 +53,12 @@ func (gaReq *GitApiReq) UrlValInit() {
 
 // GitApi http output structure
 type GitApiRes struct {
-	Body   *[]byte      `json:"Body"`
-	Err    string       `json:"Err"`
-	Header *http.Header `json:"Header"` // Http response header
 	Url    *url.URL     `json:"Url"`    // In.Uri + In.Endpoint
-	Output *string      `json:"Output"` // Api response body in string
+	Header *http.Header `json:"Header"` // Http response header
 	Status string       `json:"Status"` // Http response status
+	Body   *[]byte      `json:"Body"`
+	Output *string      `json:"Output"` // Api response body in string
+	Err    string       `json:"Err"`
 }
 
 // Check response status == 2xx
@@ -68,15 +68,15 @@ func (gaRes *GitApiRes) Ok() bool {
 
 // GitApi
 type GitApi struct {
-	Info       GitApiInfo `json:"Info"`       // Pointer to structure. Use NilType.Nil() for nil pointer
 	Method     string     `json:"Method"`     // Http request method
+	SkipVerify bool       `json:"skipverify"` // Api request skip cert verify (allow self-signed cert)
+	Vendor     string     `json:"Vendor"`     // github/gitea
 	Name       string     `json:"Name"`       // Name of connection
 	Repo       string     `json:"Repo"`       // Repository name
+	User       string     `json:"User"`       // Api username
 	Req        GitApiReq  `json:"In"`         // Api http input
 	Res        GitApiRes  `json:"Out"`        // Api http output
-	SkipVerify bool       `json:"skipverify"` // Api request skip cert verify (allow self-signed cert)
-	User       string     `json:"User"`       // Api username
-	Vendor     string     `json:"Vendor"`     // github/gitea
+	Info       GitApiInfo `json:"Info"`       // Pointer to structure. Use NilType.Nil() for nil pointer
 }
 
 // Setup a *GitApi
@@ -101,6 +101,16 @@ func GitApiNew(
 	return &self
 }
 
+// Return Res.Body
+func (ga *GitApi) Body() *string {
+	return helper.ReportSp(ga.Res.Body, "", true, true)
+}
+
+// Return Res.Err
+func (ga *GitApi) Err() *string {
+	return &ga.Res.Err
+}
+
 // Return Res.Ok()
 func (ga *GitApi) Ok() bool {
 	return ga.Res.Ok()
@@ -109,11 +119,6 @@ func (ga *GitApi) Ok() bool {
 // Return Res.Output
 func (ga *GitApi) Output() *string {
 	return ga.Res.Output
-}
-
-// Return Res.Err
-func (ga *GitApi) Err() *string {
-	return &ga.Res.Err
 }
 
 // Initialize endpoint /user/repos
@@ -232,7 +237,7 @@ func (ga *GitApi) Do() *GitApi {
 	}
 
 	helper.ReportDebug(&ga, "api", false, false)
-	helper.ReportDebug(ga.Res.Body, "api.Out.Body", false, false)
+	helper.ReportDebug(ga.Res.Body, "api.Out.Body (decoded)", false, false)
 
 	return ga
 }
@@ -327,9 +332,6 @@ func (ga *GitApi) ProcessOutputError() *GitApi {
 			ga.Res.Err = e.String()
 		}
 	}
-	// else {
-	// 	ga.Res.Err = err.Error()
-	// }
 	return ga
 }
 
