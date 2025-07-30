@@ -143,6 +143,25 @@ func (rInfo *RepoInfo) String() string {
 	return *rInfo.StringP()
 }
 
+/*
+Github uses message and status.
+Gitea uses message and errors.
+*/
+type RepoError struct {
+	Errors  string `json:"errors"`
+	Message string `json:"message"`
+	Status  string `json:"status"`
+}
+
+func (rError *RepoError) StringP() *string {
+	// return helper.ReportSp(rError, "", true, false)
+	return &rError.Message
+}
+
+func (rError *RepoError) String() string {
+	return *rError.StringP()
+}
+
 // Github repository(creation) info array
 type RepoInfoList []RepoInfo
 
