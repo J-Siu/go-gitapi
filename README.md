@@ -197,6 +197,10 @@ helper.Debug = true
 - v1.4.1
   - GitApi.ProcessOutput() - Fix output for full info
   - Use proper receiver name
+- v1.5.0
+  - Add RepoError struct
+  - Handle http error: ProcessError()
+  - Handle API error: ProcessOutputError()
 
 ### License
 
