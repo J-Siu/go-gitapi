@@ -41,7 +41,6 @@ type GitApiReq struct {
 	Entrypoint string       `json:"Entrypoint"` // Api base url
 	Endpoint   string       `json:"Endpoint"`   // Api endpoint
 	Header     *http.Header `json:"Header"`     // Http request header
-	Method     string       `json:"Method"`     // Http request method
 	Token      string       `json:"Token"`      // Api auth token
 	UrlVal     *url.Values  `json:"UrlVal"`     // Api url values
 }
@@ -69,14 +68,15 @@ func (gaRes *GitApiRes) Ok() bool {
 
 // GitApi
 type GitApi struct {
+	Info       GitApiInfo `json:"Info"`       // Pointer to structure. Use NilType.Nil() for nil pointer
+	Method     string     `json:"Method"`     // Http request method
+	Name       string     `json:"Name"`       // Name of connection
+	Repo       string     `json:"Repo"`       // Repository name
 	Req        GitApiReq  `json:"In"`         // Api http input
 	Res        GitApiRes  `json:"Out"`        // Api http output
-	Name       string     `json:"Name"`       // Name of connection
+	SkipVerify bool       `json:"skipverify"` // Api request skip cert verify (allow self-signed cert)
 	User       string     `json:"User"`       // Api username
 	Vendor     string     `json:"Vendor"`     // github/gitea
-	SkipVerify bool       `json:"skipverify"` // Api request skip cert verify (allow self-signed cert)
-	Repo       string     `json:"Repo"`       // Repository name
-	Info       GitApiInfo `json:"Info"`       // Pointer to structure. Use NilType.Nil() for nil pointer
 }
 
 // Setup a *GitApi
@@ -99,6 +99,21 @@ func GitApiNew(
 	self.Req.Entrypoint = entrypoint
 	self.Req.Token = token
 	return &self
+}
+
+// Return Res.Ok()
+func (ga *GitApi) Ok() bool {
+	return ga.Res.Ok()
+}
+
+// Return Res.Output
+func (ga *GitApi) Output() *string {
+	return ga.Res.Output
+}
+
+// Return Res.Err
+func (ga *GitApi) Err() *string {
+	return &ga.Res.Err
 }
 
 // Initialize endpoint /user/repos
@@ -164,7 +179,7 @@ func (ga *GitApi) HeaderInit() *GitApi {
 //			- auto unmarshal from http response body
 func (ga *GitApi) Do() *GitApi {
 	// Prepare Api Data
-	if ga.Req.Method != http.MethodGet && ga.Info != nil {
+	if ga.Method != http.MethodGet && ga.Info != nil {
 		j, _ := json.Marshal(&ga.Info)
 		ga.Req.Data = string(j)
 	}
@@ -176,8 +191,9 @@ func (ga *GitApi) Do() *GitApi {
 	}
 	// Prepare request
 	dataBufferP := bytes.NewBufferString(ga.Req.Data)
+	// ga.Req.Method = ga.Method
 	req, err := http.NewRequest(
-		ga.Req.Method,
+		ga.Method,
 		ga.Res.Url.String(),
 		dataBufferP)
 	if err != nil {
@@ -223,32 +239,61 @@ func (ga *GitApi) Do() *GitApi {
 
 // GitApi Get action wrapper
 func (ga *GitApi) Get() *GitApi {
-	ga.Req.Method = http.MethodGet
+	ga.SetGet()
 	return ga.Do()
 }
 
 // GitApi Del action wrapper
 func (ga *GitApi) Del() *GitApi {
-	ga.Req.Method = http.MethodDelete
+	ga.SetDel()
 	return ga.Do()
 }
 
 // GitApi Patch action wrapper
 func (ga *GitApi) Patch() *GitApi {
-	ga.Req.Method = http.MethodPatch
+	ga.SetPatch()
 	return ga.Do()
 }
 
 // GitApi Post action wrapper
 func (ga *GitApi) Post() *GitApi {
-	ga.Req.Method = http.MethodPost
+	ga.SetPost()
 	return ga.Do()
 }
 
 // GitApi Put action wrapper
 func (ga *GitApi) Put() *GitApi {
-	ga.Req.Method = http.MethodPut
+	ga.Method = http.MethodPut
 	return ga.Do()
+}
+
+func (ga *GitApi) SetGet() *GitApi {
+	ga.Method = http.MethodGet
+	return ga
+}
+
+// GitApi set http Del
+func (ga *GitApi) SetDel() *GitApi {
+	ga.Method = http.MethodDelete
+	return ga
+}
+
+// GitApi set http Patch
+func (ga *GitApi) SetPatch() *GitApi {
+	ga.Method = http.MethodPatch
+	return ga
+}
+
+// GitApi set http Post
+func (ga *GitApi) SetPost() *GitApi {
+	ga.Method = http.MethodPost
+	return ga
+}
+
+// GitApi set http Put
+func (ga *GitApi) SetPut() *GitApi {
+	ga.Method = http.MethodPut
+	return ga
 }
 
 // Print HTTP Body into string pointer
@@ -281,10 +326,10 @@ func (ga *GitApi) ProcessOutputError() *GitApi {
 		if e.Message != "" {
 			ga.Res.Err = e.String()
 		}
-	} else {
-		ga.Res.Err = err.Error()
-
 	}
+	// else {
+	// 	ga.Res.Err = err.Error()
+	// }
 	return ga
 }
 
