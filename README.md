@@ -201,6 +201,12 @@ helper.Debug = true
   - Add RepoError struct
   - Handle http error: ProcessError()
   - Handle API error: ProcessOutputError()
+- v1.6.0
+  - gitApi.go
+    - Move Method(http) from GitApiReq -> GitApi
+    - GitApi struct
+      - Add SetGet(), Set(), SetDel(), SetPatch(), SetPost(), SetPut()
+      - Add .Res wrapper func Err(), Ok(), Output()
 
 ### License
 
