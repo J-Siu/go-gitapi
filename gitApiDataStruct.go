@@ -24,7 +24,9 @@ THE SOFTWARE.
 
 package gitapi
 
-import "github.com/J-Siu/go-helper"
+import (
+	"strconv"
+)
 
 // Github repository action secret structure
 type RepoEncryptedPair struct {
@@ -67,7 +69,7 @@ type RepoPrivate struct {
 
 func (rPrivate *RepoPrivate) StringP() *string {
 	var str string
-	str += helper.BoolString(rPrivate.Private)
+	str += strconv.FormatBool(rPrivate.Private)
 	return &str
 }
 
@@ -135,7 +137,7 @@ type RepoInfo struct {
 }
 
 func (rInfo *RepoInfo) StringP() *string {
-	str := rInfo.Name + " (private:" + helper.BoolString(rInfo.Private) + ")"
+	str := rInfo.Name + " (private:" + strconv.FormatBool(rInfo.Private) + ")"
 	return &str
 }
 
@@ -154,7 +156,6 @@ type RepoError struct {
 }
 
 func (rError *RepoError) StringP() *string {
-	// return helper.ReportSp(rError, "", true, false)
 	return &rError.Message
 }
 

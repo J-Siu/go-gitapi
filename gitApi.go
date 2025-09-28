@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+
 package gitapi
 
 import (
@@ -32,7 +33,7 @@ import (
 	"net/url"
 	"path"
 
-	"github.com/J-Siu/go-helper"
+	"github.com/J-Siu/go-helper/v2/ezlog"
 )
 
 // GitApi http input structure
@@ -103,7 +104,8 @@ func GitApiNew(
 
 // Return Res.Body
 func (ga *GitApi) Body() *string {
-	return helper.ReportSp(ga.Res.Body, "", true, true)
+	s := string(*ga.Res.Body)
+	return &s
 }
 
 // Return Res.Err
@@ -236,9 +238,7 @@ func (ga *GitApi) Do() *GitApi {
 		ga.ProcessError()
 	}
 
-	helper.ReportDebug(&ga, "api", false, false)
-	helper.ReportDebug(ga.Res.Body, "api.Out.Body (decoded)", false, false)
-
+	ezlog.Debug().NameLn("api").MsgLn(&ga).NameLn("api.Out.Body (decoded)").Msg(ga.Res.Body).Out()
 	return ga
 }
 
@@ -337,17 +337,13 @@ func (ga *GitApi) ProcessOutputError() *GitApi {
 
 // Print HTTP Body Err into string pointer
 func (ga *GitApi) ProcessError() *GitApi {
-	helper.ReportDebug(*ga.Res.Body, "api.Out.Body", false, false)
+	ezlog.Debug().NameLn("api.Out.Body").Msg(ga.Res.Body).Out()
 	// Unmarshal
 	var output string
-	strP := helper.ReportSp(ga.Res.Body, "", true, false)
-	if strP != nil {
-		output += *strP
+	if ga.Res.Body != nil {
+		output += string(*ga.Res.Body)
 	}
-	strP = helper.ReportSp(ga.Res.Err, "", true, false)
-	if strP != nil {
-		output += *strP
-	}
+	output += ga.Res.Err
 	ga.Res.Output = &output
 	return ga
 }

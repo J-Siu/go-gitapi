@@ -5,7 +5,6 @@ Golang Github/Gitea api library.
 ### Table Of Content
 <!-- TOC -->
 
-- [Table Of Content](#table-of-content)
 - [Features](#features)
   - [gitApi.go](#gitapigo)
   - [gitApiDataStruct.go](#gitapidatastructgo)
@@ -222,6 +221,8 @@ helper.Debug = true
     - GitApi struct
       - Add SetGet(), SetDel(), SetPatch(), SetPost(), SetPut()
       - Add .Res wrapper func Err(), Ok(), Output()
+- v1.6.1
+  - Update go-helper
 
 ### License
 
