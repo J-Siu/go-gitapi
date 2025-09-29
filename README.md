@@ -223,6 +223,8 @@ helper.Debug = true
       - Add .Res wrapper func Err(), Ok(), Output()
 - v1.6.1
   - Update go-helper
+- v1.6.2
+  - Update go-helper/v2
 
 ### License
 
