@@ -29,7 +29,7 @@ import (
 
 	"github.com/J-Siu/go-gitapi"
 	"github.com/J-Siu/go-helper/v2/ezlog"
-	"github.com/J-Siu/go-helper/v2/str"
+	"github.com/J-Siu/go-helper/v2/strany"
 )
 
 func TestGetGithubRepository(t *testing.T) {
@@ -54,12 +54,12 @@ func TestGetGithubRepository(t *testing.T) {
 
 	// Get request
 	success := gitApi.Get().Res.Ok()
-	ezlog.Log().NameLn("List").Msg(gitApi.Res.Output).Out()
-	ezlog.Log().NameLn("Url").Msg(gitApi.Res.Url).Out()
-	ezlog.Log().Msg(gitApi.Res.Url.String()).Out()
-	ezlog.Log().NameLn("Count").Msg(len(repoList)).Out()
+	ezlog.Log().Nn("List").M(gitApi.Res.Output).Out()
+	ezlog.Log().Nn("Url").M(gitApi.Res.Url).Out()
+	ezlog.Log().M(gitApi.Res.Url.String()).Out()
+	ezlog.Log().Nn("Count").M(len(repoList)).Out()
 
 	if !success {
-		t.Fatalf("Failed:\n%s", new(str.Any).New().Str(gitApi))
+		t.Fatalf("Failed:\n%s", *strany.Any(gitApi))
 	}
 }

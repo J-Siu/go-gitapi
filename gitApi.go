@@ -238,7 +238,7 @@ func (ga *GitApi) Do() *GitApi {
 		ga.ProcessError()
 	}
 
-	ezlog.Debug().NameLn("api").MsgLn(&ga).NameLn("api.Out.Body (decoded)").Msg(ga.Res.Body).Out()
+	ezlog.Debug().Nn("api").Mn(&ga).Nn("api.Out.Body (decoded)").M(ga.Res.Body).Out()
 	return ga
 }
 
@@ -337,7 +337,7 @@ func (ga *GitApi) ProcessOutputError() *GitApi {
 
 // Print HTTP Body Err into string pointer
 func (ga *GitApi) ProcessError() *GitApi {
-	ezlog.Debug().NameLn("api.Out.Body").Msg(ga.Res.Body).Out()
+	ezlog.Debug().Nn("api.Out.Body").M(ga.Res.Body).Out()
 	// Unmarshal
 	var output string
 	if ga.Res.Body != nil {

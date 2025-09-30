@@ -1,6 +1,6 @@
-github.com/J-Siu/go-helper/v2 v2.3.1 h1:d9WtCAvMt9d4JoSHpwOLXcU9pulcgZjfv5C0NlwuqsI=
-github.com/J-Siu/go-helper/v2 v2.3.1/go.mod h1:YAYnAvD6WStwhm1mWsqkbP7yYp0+uKQBuQpqhlC7d5s=
+github.com/J-Siu/go-helper/v2 v2.3.4 h1:BgdNxgylqVw4qyzXQ5+TFXxoUktLUGapKZNXUP7uDXE=
+github.com/J-Siu/go-helper/v2 v2.3.4/go.mod h1:yjoN0uaZ75FX8xKGMZ2WpY+OwQ074cTdIolarsBH9co=
 github.com/charlievieth/strcase v0.0.5 h1:gV4iXVyD6eI5KdfOV+/vIVCKXZwtCWOmDMcu7Uy00Rs=
 github.com/charlievieth/strcase v0.0.5/go.mod h1:FIOYY1aDBMSIOFqmVomHBpoK+bteGlESRsgsdWjrhx8=
-golang.org/x/sys v0.34.0 h1:H5Y5sJ2L2JRdyv7ROF1he/lPdvFsd0mJHFw2ThKHxLA=
-golang.org/x/sys v0.34.0/go.mod h1:BJP2sWEmIv4KK5OTEluFJCKSidICx8ciO85XgH3Ak8k=
+golang.org/x/sys v0.36.0 h1:KVRy2GtZBrk1cBYA7MKu5bEZFxQk4NIDV6RLVcC8o0k=
+golang.org/x/sys v0.36.0/go.mod h1:OgkHotnGiDImocRcuBABYBEXf8A9a87e/uXjp9XT3ks=
