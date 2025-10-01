@@ -227,6 +227,10 @@ helper.Debug = true
   - Update go-helper/v2
 - v1.6.3
   - Update go-helper/v2
+- v1.6.4
+  - Update go-helper/v2
+  - Add GitApi.New()
+  - Breaking: Standardize package level GitApiNew() -> New()
 
 ### License
 

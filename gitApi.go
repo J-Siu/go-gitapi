@@ -81,20 +81,25 @@ type GitApi struct {
 }
 
 // Setup a *GitApi
-func GitApiNew(
-	name string,
-	token string,
-	entrypoint string,
-	user string,
-	vendor string,
-	skipverify bool,
-	repo string,
-	info GitApiInfo) *GitApi {
+func (ga *GitApi) New(name string, token string, entrypoint string, user string, vendor string, skipVerify bool, repo string, info GitApiInfo) *GitApi {
+	ga.Name = name
+	ga.User = user
+	ga.Vendor = vendor
+	ga.SkipVerify = skipVerify
+	ga.Repo = repo
+	ga.Info = info
+	ga.Req.Entrypoint = entrypoint
+	ga.Req.Token = token
+	return ga
+}
+
+// Setup a *GitApi
+func New(name string, token string, entrypoint string, user string, vendor string, skipVerify bool, repo string, info GitApiInfo) *GitApi {
 	var self GitApi
 	self.Name = name
 	self.User = user
 	self.Vendor = vendor
-	self.SkipVerify = skipverify
+	self.SkipVerify = skipVerify
 	self.Repo = repo
 	self.Info = info
 	self.Req.Entrypoint = entrypoint
