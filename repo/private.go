@@ -22,56 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package gitApi_test
+package repo
 
-import (
-	"testing"
+import "strconv"
 
-	"github.com/J-Siu/go-gitapi/v2"
-	"github.com/J-Siu/go-gitapi/v2/repo"
-	"github.com/J-Siu/go-helper/v2/ezlog"
-	"github.com/J-Siu/go-helper/v2/strany"
-)
+// Github repository private structure
+type Private struct {
+	Private bool `json:"private"`
+}
 
-func TestGetGithubRepository(t *testing.T) {
+func (rPrivate *Private) StringP() *string {
+	var str string
+	str += strconv.FormatBool(rPrivate.Private)
+	return &str
+}
 
-	// helper.Debug = true
-
-	var repoList repo.InfoList
-
-	// var gitApi = &GitApi{
-	// 	Name: "Test",
-	// 	Info: &repoList,
-	// 	In: GitApiIn{
-	// 		Entrypoint: "https://api.github.com",
-	// 	},
-	// }
-
-	var (
-		property = gitapi.Property{
-			// Debug:      true,
-			EntryPoint: "https://api.github.com",
-			Info:       &repoList,
-			Name:       "Test",
-			SkipVerify: false,
-		}
-		gitApi = gitapi.New(&property)
-		req    = gitApi.Req
-		res    = gitApi.Res
-	)
-	// Setup endpoint
-	req.Endpoint = "repositories"
-	// Setup Github header
-	gitApi.HeaderGithub()
-
-	// Get request
-	success := gitApi.Get().Res.Ok()
-	ezlog.Log().Nn("List").M(res.Output).Out()
-	ezlog.Log().Nn("Url").M(res.Url).Out()
-	ezlog.Log().M(res.Url.String()).Out()
-	ezlog.Log().Nn("Count").M(len(repoList)).Out()
-
-	if !success {
-		t.Fatalf("Failed:\n%s", *strany.Any(gitApi))
-	}
+func (rPrivate *Private) String() string {
+	return *rPrivate.StringP()
 }

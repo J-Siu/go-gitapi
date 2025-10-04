@@ -22,56 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package gitApi_test
+package gitapi
 
-import (
-	"testing"
+type Vendor string
 
-	"github.com/J-Siu/go-gitapi/v2"
-	"github.com/J-Siu/go-gitapi/v2/repo"
-	"github.com/J-Siu/go-helper/v2/ezlog"
-	"github.com/J-Siu/go-helper/v2/strany"
+// GitApi supported vendors
+const (
+	VendorGithub Vendor = "github"
+	VendorGitea  Vendor = "gitea"
+	VendorGogs   Vendor = "gogs"
 )
-
-func TestGetGithubRepository(t *testing.T) {
-
-	// helper.Debug = true
-
-	var repoList repo.InfoList
-
-	// var gitApi = &GitApi{
-	// 	Name: "Test",
-	// 	Info: &repoList,
-	// 	In: GitApiIn{
-	// 		Entrypoint: "https://api.github.com",
-	// 	},
-	// }
-
-	var (
-		property = gitapi.Property{
-			// Debug:      true,
-			EntryPoint: "https://api.github.com",
-			Info:       &repoList,
-			Name:       "Test",
-			SkipVerify: false,
-		}
-		gitApi = gitapi.New(&property)
-		req    = gitApi.Req
-		res    = gitApi.Res
-	)
-	// Setup endpoint
-	req.Endpoint = "repositories"
-	// Setup Github header
-	gitApi.HeaderGithub()
-
-	// Get request
-	success := gitApi.Get().Res.Ok()
-	ezlog.Log().Nn("List").M(res.Output).Out()
-	ezlog.Log().Nn("Url").M(res.Url).Out()
-	ezlog.Log().M(res.Url.String()).Out()
-	ezlog.Log().Nn("Count").M(len(repoList)).Out()
-
-	if !success {
-		t.Fatalf("Failed:\n%s", *strany.Any(gitApi))
-	}
-}

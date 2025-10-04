@@ -22,11 +22,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package gitapi
+package repo
 
-// GitApi supperted vendors
-const (
-	Vendor_Github = "github"
-	Vendor_Gitea  = "gitea"
-	Vendor_Gogs   = "gogs"
-)
+// Github repository topics structure
+type Topics struct {
+	Topics *[]string `json:"topics"` // Github topics is "Topics"
+	Names  *[]string `json:"names"`  // Gitea topics is "Names"
+}
+
+func (t *Topics) StringP() *string {
+	var str string
+	// Gitea
+	if t.Names != nil {
+		for _, t := range *t.Names {
+			str += t + "\n"
+		}
+	}
+	// Github
+	if t.Topics != nil {
+		for _, t := range *t.Topics {
+			str += t + "\n"
+		}
+	}
+	return &str
+}
+
+func (t *Topics) String() string {
+	return *t.StringP()
+}

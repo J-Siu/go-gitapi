@@ -1,19 +1,15 @@
 # go-gitapi  [![Paypal donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?business=HZF49NM9D35SJ&no_recurring=0&currency_code=CAD)
 
-Golang Github/Gitea api library.
+Golang Github/Gitea api library using [go-restapi](https://github.com/J-Siu/go-restapi).
 
 ### Table Of Content
 <!-- TOC -->
 
-- [Features](#features)
-  - [gitApi.go](#gitapigo)
-  - [gitApiDataStruct.go](#gitapidatastructgo)
 - [Pro](#pro)
 - [Doc](#doc)
 - [Dependency](#dependency)
 - [Supported git repository services](#supported-git-repository-services)
 - [Usage Example](#usage-example)
-  - [Debug](#debug)
 - [Used By Project](#used-by-project)
 - [Repository](#repository)
 - [Contributors](#contributors)
@@ -22,80 +18,38 @@ Golang Github/Gitea api library.
 
 <!-- /TOC -->
 <!--more-->
-### Features
 
-- API action
-  - [x] Do
-  - [x] Get
-  - [x] Del
-  - [x] Patch
-  - [x] Post
-  - [x] Put
+#### api.go
 
-#### gitApi.go
-- type GitApiReq struct
-- func (gaReq *GitApiReq) UrlValInit()
-- type GitApiRes struct
-- func (gaRes *GitApiRes) Ok() bool
-- type GitApi struct
-- func GitApiNew(
-- func (ga *GitApi) Ok() bool
-- func (ga *GitApi) Output() *string
-- func (ga *GitApi) Err() *string
-- func (ga *GitApi) EndpointUserRepos() *GitApi
-- func (ga *GitApi) EndpointRepos() *GitApi
-- func (ga *GitApi) EndpointReposTopics() *GitApi
-- func (ga *GitApi) EndpointReposSecrets() *GitApi
-- func (ga *GitApi) EndpointReposSecretsPubkey() *GitApi
-- func (ga *GitApi) HeaderGithub() *GitApi
-- func (ga *GitApi) HeaderInit() *GitApi
-- func (ga *GitApi) Do() *GitApi
-- func (ga *GitApi) Get() *GitApi
-- func (ga *GitApi) Del() *GitApi
-- func (ga *GitApi) Patch() *GitApi
-- func (ga *GitApi) Post() *GitApi
-- func (ga *GitApi) Put() *GitApi
-- func (ga *GitApi) SetGet() *GitApi
-- func (ga *GitApi) SetDel() *GitApi
-- func (ga *GitApi) SetPatch() *GitApi
-- func (ga *GitApi) SetPost() *GitApi
-- func (ga *GitApi) SetPut() *GitApi
-- func (ga *GitApi) ProcessOutput() *GitApi
-- func (ga *GitApi) ProcessOutputError() *GitApi
-- func (ga *GitApi) ProcessError() *GitApi
-#### gitApiDataStruct.go
-- type RepoEncryptedPair struct
-- func (rEncryptedPair *RepoEncryptedPair) StringP() *string
-- func (rEncryptedPair *RepoEncryptedPair) String() string
-- type RepoPublicKey struct
-- func (rPKey *RepoPublicKey) StringP() *string
-- func (rPKey *RepoPublicKey) String() string
-- type RepoPrivate struct
-- func (rPrivate *RepoPrivate) StringP() *string
-- func (rPrivate *RepoPrivate) String() string
-- type RepoVisibility struct
-- func (rVisibility *RepoVisibility) StringP() *string
-- func (rVisibility *RepoVisibility) String() string
-- type RepoDescription struct
-- func (rDesc *RepoDescription) StringP() *string
-- func (rDesc *RepoDescription) String() string
-- type RepoTopics struct
-- func (rTopics *RepoTopics) StringP() *string
-- func (rTopics *RepoTopics) String() string
-- type RepoInfo struct
-- func (rInfo *RepoInfo) StringP() *string
-- func (rInfo *RepoInfo) String() string
-- type RepoError struct
-- func (rError *RepoError) StringP() *string
-- func (rError *RepoError) String() string
-- type RepoInfoList []RepoInfo
-- func (rInfoList *RepoInfoList) StringP() *string
-- func (rInfoList *RepoInfoList) String() string
-- type NilType struct
-- func (nilT *NilType) StringP() *string
-- func (nilT *NilType) String() string
-- func Nil() *NilType
-- type GitApiInfo interface
+```go
+func New(property *Property) *GitApi
+func (t *GitApi) New(property *Property) *GitApi
+func (t *GitApi) EndpointUserRepos() *GitApi
+func (t *GitApi) EndpointRepos() *GitApi
+func (t *GitApi) EndpointReposTopics() *GitApi
+func (t *GitApi) EndpointReposSecrets() *GitApi
+func (t *GitApi) EndpointReposSecretsPubkey() *GitApi
+func (t *GitApi) HeaderGithub() *GitApi
+func (t *GitApi) HeaderInit() *GitApi
+```
+
+```go
+type IInfo interface
+```
+
+#### Repo Struct
+
+```go
+type EncryptedPair struct
+type PublicKey struct
+type Private struct
+type Visibility struct
+type Description struct
+type Topics struct
+type Info struct
+type Error struct
+type InfoList []IInfo
+```
 
 ### Pro
 
@@ -128,14 +82,19 @@ Following is code to create a new repository:
 
 2. Setup and execute
     ```go
+    property = gitapi.Property{
+      // Debug:      true,
+      EntryPoint: "https://api.github.com",
+      Info:       &repoList,
+      Name:       "Test",
+      User:       "User",
+      Token:      "01234567890123456789012345678912",
+      Vendor:     gitapi.VendorGithub,
+      SkipVerify: false,
+    }
+
     // Get instance
-    gitApi := gitapi.GitApiNew(
-      "Test",   // Connection name for debug print out purpose
-      "01234567890123456789012345678912", // API token,
-      "https://api.github.com", // API entrypoint
-      "User",  // user
-      "github", // vendor/brand
-      &info)    // data for request
+    gitApi := gitapi.New(&property)
     // Setup endpoint
     gitApi.EndpointRepos()
     // Setup Github header
@@ -145,19 +104,6 @@ Following is code to create a new repository:
     // Do request
     success := gitApi.Do().Ok()
     ```
-
-3. Print out using helper function
-    ```go
-    helper.ReportStatus(success, gitApi.Name, false, true)
-    helper.Report(gitApi.Output(), gitApi.Name, false, true)
-    ```
-
-#### Debug
-
-Enable debug
-```go
-helper.Debug = true
-```
 
 ### Used By Project
 
@@ -231,6 +177,8 @@ helper.Debug = true
   - Update go-helper/v2
   - Add GitApi.New()
   - Breaking: Standardize package level GitApiNew() -> New()
+- v2.0.0
+  - Split rest api to [go-restapi](https://github.com/J-Siu/go-restapi).
 
 ### License
 
