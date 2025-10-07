@@ -179,6 +179,8 @@ Following is code to create a new repository:
   - Breaking: Standardize package level GitApiNew() -> New()
 - v2.0.0
   - Split rest api to [go-restapi](https://github.com/J-Siu/go-restapi).
+- v2.0.1
+  - Add repo archived
 
 ### License
 
