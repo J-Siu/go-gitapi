@@ -180,7 +180,9 @@ Following is code to create a new repository:
 - v2.0.0
   - Split rest api to [go-restapi](https://github.com/J-Siu/go-restapi).
 - v2.0.1
-  - Add repo archived
+  - Add repo archived support
+- v2.0.2
+  - Update go-helper/v2, go-restapi
 
 ### License
 
