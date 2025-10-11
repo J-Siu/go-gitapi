@@ -29,10 +29,10 @@ type Description struct {
 	Description string `json:"description"`
 }
 
-func (rDesc *Description) StringP() *string {
-	return &rDesc.Description
+func (t *Description) StringP() *string {
+	return &t.Description
 }
 
-func (rDesc *Description) String() string {
-	return *rDesc.StringP()
+func (t *Description) String() string {
+	return *t.StringP()
 }

@@ -29,10 +29,10 @@ type Visibility struct {
 	Visibility string `json:"visibility"`
 }
 
-func (rVisibility *Visibility) StringP() *string {
-	return &rVisibility.Visibility
+func (t *Visibility) StringP() *string {
+	return &t.Visibility
 }
 
-func (rVisibility *Visibility) String() string {
-	return *rVisibility.StringP()
+func (t *Visibility) String() string {
+	return *t.StringP()
 }

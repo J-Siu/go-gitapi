@@ -31,12 +31,11 @@ type Private struct {
 	Private bool `json:"private"`
 }
 
-func (rPrivate *Private) StringP() *string {
-	var str string
-	str += strconv.FormatBool(rPrivate.Private)
-	return &str
+func (t *Private) String() string {
+	return strconv.FormatBool(t.Private)
 }
 
-func (rPrivate *Private) String() string {
-	return *rPrivate.StringP()
+func (t *Private) StringP() *string {
+	tmp := t.String()
+	return &tmp
 }

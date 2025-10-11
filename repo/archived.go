@@ -30,11 +30,11 @@ type Archived struct {
 	Archived bool `json:"archived"`
 }
 
-func (s *Archived) String() string {
-	return strconv.FormatBool(s.Archived)
+func (t *Archived) String() string {
+	return strconv.FormatBool(t.Archived)
 }
 
-func (s *Archived) StringP() *string {
-	tmp := s.String()
+func (t *Archived) StringP() *string {
+	tmp := t.String()
 	return &tmp
 }

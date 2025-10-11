@@ -30,13 +30,13 @@ type PublicKey struct {
 	Key    string `json:"key"`
 }
 
-func (rPKey *PublicKey) StringP() *string {
+func (t *PublicKey) StringP() *string {
 	var str string
-	str += "Key:" + rPKey.Key + "\n"
-	str += "Key ID:" + rPKey.Key_id + "\n"
+	str += "Key:" + t.Key + "\n"
+	str += "Key ID:" + t.Key_id + "\n"
 	return &str
 }
 
-func (rPKey *PublicKey) String() string {
-	return *rPKey.StringP()
+func (t *PublicKey) String() string {
+	return *t.StringP()
 }

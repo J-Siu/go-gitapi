@@ -30,13 +30,13 @@ type EncryptedPair struct {
 	Key_id          string `json:"key_id"`          // Public key id
 }
 
-func (rEncryptedPair *EncryptedPair) StringP() *string {
+func (t *EncryptedPair) StringP() *string {
 	var str string
-	str += "Value:" + rEncryptedPair.Encrypted_value + "\n"
-	str += "Key ID:" + rEncryptedPair.Key_id + "\n"
+	str += "Value:" + t.Encrypted_value + "\n"
+	str += "Key ID:" + t.Key_id + "\n"
 	return &str
 }
 
-func (rEncryptedPair *EncryptedPair) String() string {
-	return *rEncryptedPair.StringP()
+func (t *EncryptedPair) String() string {
+	return *t.StringP()
 }

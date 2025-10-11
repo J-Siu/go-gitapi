@@ -26,17 +26,17 @@ package repo
 
 import "strconv"
 
-// Github repository(creation) info structure
-type Info struct {
-	Name    string `json:"name"`
-	Private bool   `json:"private"`
+// Github repository has_projects structure
+type Projects struct {
+	Has bool `json:"has_projects"`
 }
 
-func (t *Info) StringP() *string {
-	str := t.Name + " (private:" + strconv.FormatBool(t.Private) + ")"
+func (t *Projects) StringP() *string {
+	var str string
+	str += strconv.FormatBool(t.Has)
 	return &str
 }
 
-func (t *Info) String() string {
+func (t *Projects) String() string {
 	return *t.StringP()
 }

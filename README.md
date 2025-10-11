@@ -183,6 +183,8 @@ Following is code to create a new repository:
   - Add repo archived support
 - v2.0.2
   - Update go-helper/v2, go-restapi
+- v2.1.0
+  - Add repo api support for discussions, projects and wiki
 
 ### License
 
