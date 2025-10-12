@@ -22,15 +22,16 @@ Golang Github/Gitea api library using [go-restapi](https://github.com/J-Siu/go-r
 #### api.go
 
 ```go
-func New(property *Property) *GitApi
-func (t *GitApi) New(property *Property) *GitApi
-func (t *GitApi) EndpointUserRepos() *GitApi
 func (t *GitApi) EndpointRepos() *GitApi
-func (t *GitApi) EndpointReposTopics() *GitApi
+func (t *GitApi) EndpointReposActionsGithub() *GitApi
 func (t *GitApi) EndpointReposSecrets() *GitApi
 func (t *GitApi) EndpointReposSecretsPubkey() *GitApi
+func (t *GitApi) EndpointReposTopics() *GitApi
+func (t *GitApi) EndpointUserRepos() *GitApi
 func (t *GitApi) HeaderGithub() *GitApi
 func (t *GitApi) HeaderInit() *GitApi
+func (t *GitApi) New(property *Property) *GitApi
+func New(property *Property) *GitApi
 ```
 
 ```go
@@ -185,6 +186,8 @@ Following is code to create a new repository:
   - Update go-helper/v2, go-restapi
 - v2.1.0
   - Add repo api support for discussions, projects and wiki
+- v2.1.1
+  - Add repo api support for actions and `EndpointReposActionsGithub`
 
 ### License
 

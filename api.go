@@ -71,22 +71,25 @@ func (t *GitApi) EndpointRepos() *GitApi {
 
 // Initialize endpoint /repos/OWNER/REPO/topics
 func (t *GitApi) EndpointReposTopics() *GitApi {
-	t.EndpointRepos()
-	t.Req.Endpoint = path.Join(t.Req.Endpoint, "topics")
+	t.Req.Endpoint = path.Join(t.EndpointRepos().Req.Endpoint, "topics")
 	return t
 }
 
 // Initialize endpoint /repos/OWNER/REPO/actions/secrets
 func (t *GitApi) EndpointReposSecrets() *GitApi {
-	t.EndpointRepos()
-	t.Req.Endpoint = path.Join(t.Req.Endpoint, "actions", "secrets")
+	t.Req.Endpoint = path.Join(t.EndpointRepos().Req.Endpoint, "actions", "secrets")
 	return t
 }
 
 // Initialize endpoint /repos/OWNER/REPO/actions/secrets/public-key
 func (t *GitApi) EndpointReposSecretsPubkey() *GitApi {
-	t.EndpointReposSecrets()
-	t.Req.Endpoint = path.Join(t.Req.Endpoint, "public-key")
+	t.Req.Endpoint = path.Join(t.EndpointReposSecrets().Req.Endpoint, "public-key")
+	return t
+}
+
+// Initialize endpoint /repos/OWNER/REPO/actions/secrets/public-key
+func (t *GitApi) EndpointReposActionsGithub() *GitApi {
+	t.Req.Endpoint = path.Join(t.EndpointRepos().Req.Endpoint, "actions", "permissions")
 	return t
 }
 

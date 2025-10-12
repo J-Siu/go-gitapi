@@ -1,4 +1,6 @@
 /*
+The MIT License (MIT)
+
 Copyright © 2025 John, Sing Dao, Siu <john.sd.siu@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,8 +22,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package gitapi
+package repo
 
-const (
-	Version = "v2.1.1"
-)
+import "strconv"
+
+// Gitea repository Actions structure
+type Actions struct {
+	Has bool `json:"has_actions"`
+}
+
+func (t *Actions) String() string {
+	return strconv.FormatBool(t.Has)
+}
+
+func (t *Actions) StringP() *string {
+	tmp := t.String()
+	return &tmp
+}

@@ -1,4 +1,6 @@
 /*
+The MIT License (MIT)
+
 Copyright © 2025 John, Sing Dao, Siu <john.sd.siu@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,8 +22,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package gitapi
+package repo
 
-const (
-	Version = "v2.1.1"
-)
+import "strconv"
+
+// Github repository Actions structure
+type ActionsGithub struct {
+	Enabled bool `json:"enabled"`
+}
+
+func (t *ActionsGithub) String() string {
+	return strconv.FormatBool(t.Enabled)
+}
+
+func (t *ActionsGithub) StringP() *string {
+	tmp := t.String()
+	return &tmp
+}
