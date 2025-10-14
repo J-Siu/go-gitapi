@@ -24,6 +24,8 @@ THE SOFTWARE.
 
 package repo
 
+import "strings"
+
 // Github repository topics structure
 type Topics struct {
 	Topics *[]string `json:"topics"` // Github topics is "Topics"
@@ -34,15 +36,11 @@ func (t *Topics) StringP() *string {
 	var str string
 	// Gitea
 	if t.Names != nil {
-		for _, t := range *t.Names {
-			str += t + "\n"
-		}
+		str = strings.Join(*t.Names, ",")
 	}
 	// Github
 	if t.Topics != nil {
-		for _, t := range *t.Topics {
-			str += t + "\n"
-		}
+		str = strings.Join(*t.Names, ",")
 	}
 	return &str
 }
