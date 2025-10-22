@@ -1,0 +1,69 @@
+- v1.0.0
+  - Feature complete
+- v1.0.1
+  - Fix data struct *.StringP() output
+- v1.1.0
+  - Consolidate output processing
+- v1.2.0
+  - GitApiOut
+    - move output from GitApi
+    - add Success
+    GitApi struct
+    - Change Header to non-pointer
+    - Use path and url package to handle endpoint and url
+    - Add HeaderGithub()
+- v1.2.4
+  - Update go-helper package for bug fix
+- v1.2.5
+  - GitApiIn
+    - Add UrlVal(url.Values)
+- v1.2.6
+  - Update go-helper package for bug fix
+- v1.3.0
+  - All GitApi methods reutrn self pointer
+  - Interface GitApiInfo remove type restrictions
+  - Member GitApi.In -> GitApi.Req
+  - Member GitApi.Out -> GitApi.Res
+  - Type GitApiIn -> GitApiReq
+  - Type GitApiOut -> GitApiRes
+- v1.3.1
+  - Improve README.md
+- v1.3.2
+  - Fix `GitApi.Do()` wiping `GitApi.Req.Data` if `GitApi.Info` is `nil`
+- v1.4.0
+  - upgrade helper to 1.1.6
+  - `GitApi` struct and `GitApiMew()`
+    - add `SkipVerify` to support self-signed cert
+- v1.4.1
+  - GitApi.ProcessOutput() - Fix output for full info
+  - Use proper receiver name
+- v1.5.0
+  - Add RepoError struct
+  - Handle http error: ProcessError()
+  - Handle API error: ProcessOutputError()
+- v1.6.0
+  - gitApi.go
+    - Move Method(http) from GitApiReq -> GitApi
+    - GitApi struct
+      - Add SetGet(), SetDel(), SetPatch(), SetPost(), SetPut()
+      - Add .Res wrapper func Err(), Ok(), Output()
+- v1.6.1
+  - Update go-helper
+- v1.6.2
+  - Update go-helper/v2
+- v1.6.3
+  - Update go-helper/v2
+- v1.6.4
+  - Update go-helper/v2
+  - Add GitApi.New()
+  - Breaking: Standardize package level GitApiNew() -> New()
+- v2.0.0
+  - Split rest api to [go-restapi](https://github.com/J-Siu/go-restapi).
+- v2.0.1
+  - Add repo archived support
+- v2.0.2
+  - Update go-helper/v2, go-restapi
+- v2.1.0
+  - Add repo api support for discussions, projects and wiki
+- v2.1.1
+  - Add repo api support for actions and `EndpointReposActionsGithub`
