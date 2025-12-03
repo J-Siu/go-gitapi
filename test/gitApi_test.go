@@ -27,7 +27,7 @@ package gitApi_test
 import (
 	"testing"
 
-	"github.com/J-Siu/go-gitapi/v2"
+	"github.com/J-Siu/go-gitapi/v2/gitapi"
 	"github.com/J-Siu/go-gitapi/v2/repo"
 	"github.com/J-Siu/go-helper/v2/ezlog"
 	"github.com/J-Siu/go-helper/v2/strany"
@@ -37,17 +37,8 @@ func TestGetGithubRepository(t *testing.T) {
 
 	// helper.Debug = true
 
-	var repoList repo.InfoList
-
-	// var gitApi = &GitApi{
-	// 	Name: "Test",
-	// 	Info: &repoList,
-	// 	In: GitApiIn{
-	// 		Entrypoint: "https://api.github.com",
-	// 	},
-	// }
-
 	var (
+		repoList repo.InfoList
 		property = gitapi.Property{
 			// Debug:      true,
 			EntryPoint: "https://api.github.com",
@@ -66,10 +57,10 @@ func TestGetGithubRepository(t *testing.T) {
 
 	// Get request
 	success := gitApi.Get().Res.Ok()
-	ezlog.Log().Nn("List").M(res.Output).Out()
-	ezlog.Log().Nn("Url").M(res.Url).Out()
-	ezlog.Log().M(res.Url.String()).Out()
-	ezlog.Log().Nn("Count").M(len(repoList)).Out()
+	ezlog.Log().N("List").Lm(res.Output).Out()
+	ezlog.Log().N("Url").Lm(res.Url).Out()
+	ezlog.Log().Lm(res.Url.String()).Out()
+	ezlog.Log().N("Count").M(len(repoList)).Out()
 
 	if !success {
 		t.Fatalf("Failed:\n%s", *strany.Any(gitApi))

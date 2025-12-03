@@ -23,5 +23,5 @@ THE SOFTWARE.
 package gitapi
 
 const (
-	Version = "v2.1.1"
+	Version = "v2.2.0"
 )
