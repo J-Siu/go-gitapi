@@ -67,3 +67,5 @@
   - Add repo api support for discussions, projects and wiki
 - v2.1.1
   - Add repo api support for actions and `EndpointReposActionsGithub`
+- v2.2.0
+  - Move gitapi package into folder

@@ -1,8 +1,8 @@
-github.com/J-Siu/go-helper/v2 v2.5.2 h1:+YapLpQMLOd4KpftcvSrHYUB096c34FT/biY6BiKG5I=
-github.com/J-Siu/go-helper/v2 v2.5.2/go.mod h1:yjoN0uaZ75FX8xKGMZ2WpY+OwQ074cTdIolarsBH9co=
-github.com/J-Siu/go-restapi v1.0.1 h1:Ap/GWs3UQ7xlK3urea9riuA5QAeBhRLAGeKPy5aT4gc=
-github.com/J-Siu/go-restapi v1.0.1/go.mod h1:VtcH3CrzVe2uYda7JVGcLJW+SSfHdr9xhUcVT+4Md6A=
+github.com/J-Siu/go-helper/v2 v2.6.3 h1:to6thX2FajLW4HGqoFN9HOINAsbDCmECByzrUvAtIx8=
+github.com/J-Siu/go-helper/v2 v2.6.3/go.mod h1:fd6Xwr+ZMgFSwN1bnVZwSTvmReEKI7Huky4bT526bz4=
+github.com/J-Siu/go-restapi v1.0.2 h1:7ksA1U2RzczndSlnqlILZOFY7NGUTW/SnqaYyjlohuc=
+github.com/J-Siu/go-restapi v1.0.2/go.mod h1:6kDKL2bFWN16aWHq5SjI4l0WggqPblrAjGAJFnQF8TY=
 github.com/charlievieth/strcase v0.0.5 h1:gV4iXVyD6eI5KdfOV+/vIVCKXZwtCWOmDMcu7Uy00Rs=
 github.com/charlievieth/strcase v0.0.5/go.mod h1:FIOYY1aDBMSIOFqmVomHBpoK+bteGlESRsgsdWjrhx8=
-golang.org/x/sys v0.36.0 h1:KVRy2GtZBrk1cBYA7MKu5bEZFxQk4NIDV6RLVcC8o0k=
-golang.org/x/sys v0.36.0/go.mod h1:OgkHotnGiDImocRcuBABYBEXf8A9a87e/uXjp9XT3ks=
+golang.org/x/sys v0.38.0 h1:3yZWxaJjBmCWXqhN1qh02AkOnCQ1poK6oF+a7xWL6Gc=
+golang.org/x/sys v0.38.0/go.mod h1:OgkHotnGiDImocRcuBABYBEXf8A9a87e/uXjp9XT3ks=
