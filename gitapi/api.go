@@ -50,11 +50,6 @@ func (t *GitApi) New(property *Property) *GitApi {
 	return t
 }
 
-// Setup a *GitApi
-func New(property *Property) *GitApi {
-	return new(GitApi).New(property)
-}
-
 // Initialize endpoint /user/repos
 func (t *GitApi) EndpointUserRepos() *GitApi {
 	t.Req.Endpoint = "/user/repos"
@@ -111,5 +106,30 @@ func (t *GitApi) HeaderGithub() *GitApi {
 func (t *GitApi) HeaderInit() *GitApi {
 	header := make(http.Header)
 	t.Req.Header = &header
+	return t
+}
+
+func (t *GitApi) SetGet() *GitApi {
+	t.Api.SetGet()
+	return t
+}
+
+func (t *GitApi) SetDel() *GitApi {
+	t.Api.SetDel()
+	return t
+}
+
+func (t *GitApi) SetPatch() *GitApi {
+	t.Api.SetPatch()
+	return t
+}
+
+func (t *GitApi) SetPost() *GitApi {
+	t.Api.SetPost()
+	return t
+}
+
+func (t *GitApi) SetPut() *GitApi {
+	t.Api.SetPut()
 	return t
 }
