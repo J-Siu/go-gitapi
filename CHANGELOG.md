@@ -69,3 +69,7 @@
   - Add repo api support for actions and `EndpointReposActionsGithub`
 - v2.2.0
   - Move gitapi package into folder
+- v2.2.1
+  - Add restapi set method wrappers
+  - Split package level function to pkg.go.
+  - Update go-helper/v2, go-restapi
