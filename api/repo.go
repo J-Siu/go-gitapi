@@ -28,25 +28,35 @@ import (
 	"path"
 
 	"github.com/J-Siu/go-gitapi/v3/base"
+	"github.com/J-Siu/go-gitapi/v3/info"
 )
 
 // Github repository(creation) info structure
 type Repo struct {
 	*base.Base
+	Info info.Info
 }
 
 func (t *Repo) New(property *base.Property) *Repo {
-	property.Info = nil
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	property.Info = &t.Info
+	t.Base = new(base.Base).New(property).HeaderGithub()
 	return t
 }
+
+// Set action: delete
 func (t *Repo) Del() *Repo {
-	t.SetDel()
+	t.Base.Info = nil
+	t.EndpointRepos().SetDel()
+	return t
+}
+
+// Set action: create
+func (t *Repo) Create() *Repo {
+	t.EndpointUserRepos().SetPost()
 	return t
 }
 func (t *Repo) DelSecret(secret string) *Repo {
-	t.EndpointReposSecrets()
+	t.EndpointReposSecrets().SetDel()
 	t.Req.Endpoint = path.Join(t.Req.Endpoint, secret)
-	t.SetDel()
 	return t
 }
