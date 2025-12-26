@@ -22,47 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package gitApi_test
+package info
 
 import (
-	"testing"
-
-	"github.com/J-Siu/go-gitapi/v3/base"
-	"github.com/J-Siu/go-gitapi/v3/info"
-	"github.com/J-Siu/go-helper/v2/ezlog"
-	"github.com/J-Siu/go-helper/v2/strany"
+	"strconv"
 )
 
-func TestGetGithubRepository(t *testing.T) {
+// Github repository Wiki structure
+type Wiki struct {
+	Has bool `json:"has_wiki"`
+}
 
-	// helper.Debug = true
+func (t *Wiki) String() string {
+	return strconv.FormatBool(t.Has)
+}
 
-	var (
-		repoList info.InfoList
-		property = base.Property{
-			// Debug:      true,
-			EntryPoint: "https://api.github.com",
-			Info:       &repoList,
-			Name:       "Test",
-			SkipVerify: false,
-		}
-		gitApi = base.New(&property)
-		req    = gitApi.Api.Req
-		res    = gitApi.Api.Res
-	)
-	// Setup endpoint
-	req.Endpoint = "repositories"
-	// Setup Github header
-	gitApi.HeaderGithub()
-
-	// Get request
-	success := gitApi.Api.Get().Res.Ok()
-	ezlog.Log().N("List").Lm(res.Output).Out()
-	ezlog.Log().N("Url").Lm(res.Url).Out()
-	ezlog.Log().Lm(res.Url.String()).Out()
-	ezlog.Log().N("Count").M(len(repoList)).Out()
-
-	if !success {
-		t.Fatalf("Failed:\n%s", *strany.Any(gitApi))
-	}
+func (t *Wiki) StringP() *string {
+	tmp := t.String()
+	return &tmp
 }

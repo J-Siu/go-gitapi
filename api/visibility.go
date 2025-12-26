@@ -22,13 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package gitapi
+package api
 
-type Vendor string
-
-// GitApi supported vendors
-const (
-	VendorGithub Vendor = "github"
-	VendorGitea  Vendor = "gitea"
-	VendorGogs   Vendor = "gogs"
+import (
+	"github.com/J-Siu/go-gitapi/v3/base"
+	"github.com/J-Siu/go-gitapi/v3/info"
 )
+
+// Github repository visibility structure
+type Visibility struct {
+	*base.Base
+	Info info.Visibility
+}
+
+func (t *Visibility) New(property *base.Property) *Visibility {
+	property.Info = &t.Info
+	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	return t
+}

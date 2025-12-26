@@ -22,17 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package gitapi
+package api
 
-type Property struct {
-	Debug      bool   `json:"debug,omitempty"`
-	EntryPoint string `json:"entry_point,omitempty"`
-	Info       IInfo  `json:"info,omitempty"`
-	SkipVerify bool   `json:"skip_verify,omitempty"`
+import (
+	"github.com/J-Siu/go-gitapi/v3/base"
+	"github.com/J-Siu/go-gitapi/v3/info"
+)
 
-	Name   string `json:"name,omitempty"`
-	Repo   string `json:"repo,omitempty"`
-	Token  string `json:"token,omitempty"`
-	User   string `json:"user,omitempty"`
-	Vendor Vendor `json:"vendor,omitempty"`
+// Github repository description structure
+type Description struct {
+	*base.Base
+	Info info.Description
+}
+
+func (t *Description) New(property *base.Property) *Description {
+	property.Info = &t.Info
+	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	return t
 }

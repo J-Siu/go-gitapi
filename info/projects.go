@@ -22,47 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package gitApi_test
+package info
 
 import (
-	"testing"
-
-	"github.com/J-Siu/go-gitapi/v3/base"
-	"github.com/J-Siu/go-gitapi/v3/info"
-	"github.com/J-Siu/go-helper/v2/ezlog"
-	"github.com/J-Siu/go-helper/v2/strany"
+	"strconv"
 )
 
-func TestGetGithubRepository(t *testing.T) {
+// Github repository has_projects structure
+type Projects struct {
+	Has bool `json:"has_projects"`
+}
 
-	// helper.Debug = true
 
-	var (
-		repoList info.InfoList
-		property = base.Property{
-			// Debug:      true,
-			EntryPoint: "https://api.github.com",
-			Info:       &repoList,
-			Name:       "Test",
-			SkipVerify: false,
-		}
-		gitApi = base.New(&property)
-		req    = gitApi.Api.Req
-		res    = gitApi.Api.Res
-	)
-	// Setup endpoint
-	req.Endpoint = "repositories"
-	// Setup Github header
-	gitApi.HeaderGithub()
+func (t *Projects) StringP() *string {
+	var str string
+	str += strconv.FormatBool(t.Has)
+	return &str
+}
 
-	// Get request
-	success := gitApi.Api.Get().Res.Ok()
-	ezlog.Log().N("List").Lm(res.Output).Out()
-	ezlog.Log().N("Url").Lm(res.Url).Out()
-	ezlog.Log().Lm(res.Url.String()).Out()
-	ezlog.Log().N("Count").M(len(repoList)).Out()
-
-	if !success {
-		t.Fatalf("Failed:\n%s", *strany.Any(gitApi))
-	}
+func (t *Projects) String() string {
+	return *t.StringP()
 }

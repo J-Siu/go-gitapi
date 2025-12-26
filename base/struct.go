@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package gitapi
+package base
 
 import (
 	"net/http"
@@ -31,14 +31,14 @@ import (
 	"github.com/J-Siu/go-restapi"
 )
 
-// GitApi
-type GitApi struct {
+// Base
+type Base struct {
 	*restapi.Api `json:"rest_api,omitempty"`
 	*Property
 }
 
 // Setup a *GitApi
-func (t *GitApi) New(property *Property) *GitApi {
+func (t *Base) New(property *Property) *Base {
 	apiProperty := restapi.Property{
 		Debug:      property.Debug,
 		EntryPoint: property.EntryPoint,
@@ -50,8 +50,13 @@ func (t *GitApi) New(property *Property) *GitApi {
 	return t
 }
 
+func (t *Base) Do() *Base {
+	t.Api.Do()
+	return t
+}
+
 // Initialize endpoint /user/repos
-func (t *GitApi) EndpointUserRepos() *GitApi {
+func (t *Base) EndpointUserRepos() *Base {
 	t.Req.Endpoint = "/user/repos"
 	return t
 }
@@ -59,31 +64,31 @@ func (t *GitApi) EndpointUserRepos() *GitApi {
 // Initialize endpoint /repos/OWNER/REPO
 //
 // Use current directory if GitApi.Repo is empty
-func (t *GitApi) EndpointRepos() *GitApi {
-	t.Req.Endpoint = path.Join("repos", t.User, t.Repo)
+func (t *Base) EndpointRepos() *Base {
+	t.Req.Endpoint = path.Join("repos", t.User, t.Repo())
 	return t
 }
 
 // Initialize endpoint /repos/OWNER/REPO/topics
-func (t *GitApi) EndpointReposTopics() *GitApi {
+func (t *Base) EndpointReposTopics() *Base {
 	t.Req.Endpoint = path.Join(t.EndpointRepos().Req.Endpoint, "topics")
 	return t
 }
 
 // Initialize endpoint /repos/OWNER/REPO/actions/secrets
-func (t *GitApi) EndpointReposSecrets() *GitApi {
+func (t *Base) EndpointReposSecrets() *Base {
 	t.Req.Endpoint = path.Join(t.EndpointRepos().Req.Endpoint, "actions", "secrets")
 	return t
 }
 
 // Initialize endpoint /repos/OWNER/REPO/actions/secrets/public-key
-func (t *GitApi) EndpointReposSecretsPubkey() *GitApi {
+func (t *Base) EndpointReposSecretsPubkey() *Base {
 	t.Req.Endpoint = path.Join(t.EndpointReposSecrets().Req.Endpoint, "public-key")
 	return t
 }
 
 // Initialize endpoint /repos/OWNER/REPO/actions/secrets/public-key
-func (t *GitApi) EndpointReposActionsGithub() *GitApi {
+func (t *Base) EndpointReposActionsGithub() *Base {
 	t.Req.Endpoint = path.Join(t.EndpointRepos().Req.Endpoint, "actions", "permissions")
 	return t
 }
@@ -91,7 +96,7 @@ func (t *GitApi) EndpointReposActionsGithub() *GitApi {
 // Set github/gitea header
 //
 // GitApi.Req.Token, if empty, authorization header will not be set.
-func (t *GitApi) HeaderGithub() *GitApi {
+func (t *Base) HeaderGithub() *Base {
 	header := make(http.Header)
 	t.Req.Header = &header
 	t.Req.Header.Add("Accept", "application/vnd.github.v3+json")
@@ -103,33 +108,39 @@ func (t *GitApi) HeaderGithub() *GitApi {
 }
 
 // Setup empty API header
-func (t *GitApi) HeaderInit() *GitApi {
+func (t *Base) HeaderInit() *Base {
 	header := make(http.Header)
 	t.Req.Header = &header
 	return t
 }
 
-func (t *GitApi) SetGet() *GitApi {
+func (t *Base) SetGet() *Base {
 	t.Api.SetGet()
 	return t
 }
 
-func (t *GitApi) SetDel() *GitApi {
+func (t *Base) SetDel() *Base {
 	t.Api.SetDel()
 	return t
 }
 
-func (t *GitApi) SetPatch() *GitApi {
+func (t *Base) SetPatch() *Base {
 	t.Api.SetPatch()
 	return t
 }
 
-func (t *GitApi) SetPost() *GitApi {
+func (t *Base) SetPost() *Base {
 	t.Api.SetPost()
 	return t
 }
 
-func (t *GitApi) SetPut() *GitApi {
+func (t *Base) SetPut() *Base {
 	t.Api.SetPut()
 	return t
 }
+
+func (t *Base) Err() *string    { return t.Api.Err() }
+func (t *Base) Name() string    { return t.Property.Name }
+func (t *Base) Ok() bool        { return t.Api.Ok() }
+func (t *Base) Output() *string { return t.Api.Output() }
+func (t *Base) Repo() string    { return t.Property.Repo }

@@ -22,9 +22,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package gitapi
+package info
 
-// Setup a *GitApi
-func New(property *Property) *GitApi {
-	return new(GitApi).New(property)
+// Github repository visibility structure
+type Visibility struct {
+	Visibility string `json:"visibility"`
+}
+
+
+func (t *Visibility) StringP() *string {
+	return &t.Visibility
+}
+
+func (t *Visibility) String() string {
+	return *t.StringP()
 }

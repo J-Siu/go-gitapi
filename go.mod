@@ -1,4 +1,4 @@
-module github.com/J-Siu/go-gitapi/v2
+module github.com/J-Siu/go-gitapi/v3
 
 go 1.25.1
 

@@ -22,20 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package repo
+package info
 
-import "strconv"
-
-// Github repository Wiki structure
-type Wiki struct {
-	Has bool `json:"has_wiki"`
+// Github repository public key structure
+type PublicKey struct {
+	Key_id string `json:"key_id"`
+	Key    string `json:"key"`
 }
 
-func (t *Wiki) String() string {
-	return strconv.FormatBool(t.Has)
+
+func (t *PublicKey) StringP() *string {
+	var str string
+	str += "Key:" + t.Key + "\n"
+	str += "Key ID:" + t.Key_id + "\n"
+	return &str
 }
 
-func (t *Wiki) StringP() *string {
-	tmp := t.String()
-	return &tmp
+func (t *PublicKey) String() string {
+	return *t.StringP()
 }

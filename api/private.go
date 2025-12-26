@@ -1,4 +1,6 @@
 /*
+The MIT License (MIT)
+
 Copyright © 2025 John, Sing Dao, Siu <john.sd.siu@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,8 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package gitapi
+package api
 
-const (
-	Version = "v2.2.1"
+import (
+	"github.com/J-Siu/go-gitapi/v3/base"
+	"github.com/J-Siu/go-gitapi/v3/info"
 )
+
+// Github repository private structure
+type Private struct {
+	*base.Base
+	Info info.Private
+}
+
+func (t *Private) New(property *base.Property) *Private {
+	property.Info = &t.Info
+	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	return t
+}

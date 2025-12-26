@@ -22,21 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package repo
+package base
 
-import "strconv"
+type Property struct {
+	Debug      bool   `json:"debug,omitempty"`
+	EntryPoint string `json:"entry_point,omitempty"`
+	Info       IInfo  `json:"info,omitempty"`
+	SkipVerify bool   `json:"skip_verify,omitempty"`
 
-// Github repository Discussions structure
-type Discussions struct {
-	Has bool `json:"has_discussions"`
-}
-
-func (t *Discussions) StringP() *string {
-	var str string
-	str += strconv.FormatBool(t.Has)
-	return &str
-}
-
-func (t *Discussions) String() string {
-	return *t.StringP()
+	Name   string `json:"name,omitempty"`
+	Repo   string `json:"repo,omitempty"`
+	Token  string `json:"token,omitempty"`
+	User   string `json:"user,omitempty"`
+	Vendor Vendor `json:"vendor,omitempty"`
 }

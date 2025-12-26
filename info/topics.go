@@ -22,21 +22,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package repo
+package info
 
-import "strconv"
+import (
+	"strings"
+)
 
-// Github repository(creation) info structure
-type Info struct {
-	Name    string `json:"name"`
-	Private bool   `json:"private"`
+// Github repository topics structure
+type Topics struct {
+	Topics *[]string `json:"topics"` // Github topics is "Topics"
+	Names  *[]string `json:"names"`  // Gitea topics is "Names"
 }
 
-func (t *Info) StringP() *string {
-	str := t.Name + " (private:" + strconv.FormatBool(t.Private) + ")"
+func (t *Topics) StringP() *string {
+	var str string
+	// Gitea
+	if t.Names != nil {
+		str = strings.Join(*t.Names, ",")
+	}
+	// Github
+	if t.Topics != nil {
+		str = strings.Join(*t.Names, ",")
+	}
 	return &str
 }
 
-func (t *Info) String() string {
+func (t *Topics) String() string {
 	return *t.StringP()
 }

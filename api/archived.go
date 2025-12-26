@@ -20,21 +20,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package repo
+package api
 
 import (
-	"strconv"
+	"github.com/J-Siu/go-gitapi/v3/base"
+	"github.com/J-Siu/go-gitapi/v3/info"
 )
 
 type Archived struct {
-	Archived bool `json:"archived"`
+	*base.Base
+	Info info.Archived
 }
 
-func (t *Archived) String() string {
-	return strconv.FormatBool(t.Archived)
-}
-
-func (t *Archived) StringP() *string {
-	tmp := t.String()
-	return &tmp
+func (t *Archived) New(property *base.Property) *Archived {
+	property.Info = &t.Info
+	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	return t
 }

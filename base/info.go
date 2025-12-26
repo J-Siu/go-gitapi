@@ -22,21 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package repo
+package base
 
-// Github repository action secret structure
-type EncryptedPair struct {
-	Encrypted_value string `json:"encrypted_value"` // Encrypted value
-	Key_id          string `json:"key_id"`          // Public key id
-}
+import "github.com/J-Siu/go-restapi"
 
-func (t *EncryptedPair) StringP() *string {
-	var str string
-	str += "Value:" + t.Encrypted_value + "\n"
-	str += "Key ID:" + t.Key_id + "\n"
-	return &str
-}
-
-func (t *EncryptedPair) String() string {
-	return *t.StringP()
-}
+type IInfo restapi.IInfo

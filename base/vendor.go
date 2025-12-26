@@ -22,29 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package repo
+package base
 
-import "strings"
+type Vendor string
 
-// Github repository topics structure
-type Topics struct {
-	Topics *[]string `json:"topics"` // Github topics is "Topics"
-	Names  *[]string `json:"names"`  // Gitea topics is "Names"
-}
-
-func (t *Topics) StringP() *string {
-	var str string
-	// Gitea
-	if t.Names != nil {
-		str = strings.Join(*t.Names, ",")
-	}
-	// Github
-	if t.Topics != nil {
-		str = strings.Join(*t.Names, ",")
-	}
-	return &str
-}
-
-func (t *Topics) String() string {
-	return *t.StringP()
-}
+// GitApi supported vendors
+const (
+	VendorGithub Vendor = "github"
+	VendorGitea  Vendor = "gitea"
+	VendorGogs   Vendor = "gogs"
+)

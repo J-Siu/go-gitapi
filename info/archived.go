@@ -1,6 +1,4 @@
 /*
-The MIT License (MIT)
-
 Copyright © 2025 John, Sing Dao, Siu <john.sd.siu@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,19 +20,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package repo
+package info
 
-// Github repository(creation) info array
-type InfoList []Info
+import (
+	"strconv"
+)
 
-func (t *InfoList) StringP() *string {
-	var str string
-	for _, i := range *t {
-		str += *i.StringP() + "\n"
-	}
-	return &str
+type Archived struct {
+	Archived bool `json:"archived"`
 }
 
-func (t *InfoList) String() string {
-	return *t.StringP()
+func (t *Archived) String() string {
+	return strconv.FormatBool(t.Archived)
+}
+
+func (t *Archived) StringP() *string {
+	tmp := t.String()
+	return &tmp
 }

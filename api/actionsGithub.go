@@ -22,21 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package repo
+package api
 
-import "strconv"
+import (
+	"github.com/J-Siu/go-gitapi/v3/base"
+	"github.com/J-Siu/go-gitapi/v3/info"
+)
 
-// Github repository has_projects structure
-type Projects struct {
-	Has bool `json:"has_projects"`
+// Github repository Actions structure
+type ActionsGithub struct {
+	*base.Base
+	Info info.ActionsGithub
 }
 
-func (t *Projects) StringP() *string {
-	var str string
-	str += strconv.FormatBool(t.Has)
-	return &str
-}
-
-func (t *Projects) String() string {
-	return *t.StringP()
+func (t *ActionsGithub) New(property *base.Property) *ActionsGithub {
+	property.Info = &t.Info
+	t.Base = new(base.Base).New(property).HeaderGithub().EndpointReposActionsGithub()
+	return t
 }

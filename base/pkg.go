@@ -22,8 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package gitapi
+package base
 
-import "github.com/J-Siu/go-restapi"
-
-type IInfo restapi.IInfo
+// Setup a *GitApi
+func New(property *Property) *Base {
+	return new(Base).New(property)
+}

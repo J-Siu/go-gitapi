@@ -22,17 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package repo
+package api
 
-// Github repository description structure
-type Description struct {
-	Description string `json:"description"`
+import (
+	"github.com/J-Siu/go-gitapi/v3/base"
+	"github.com/J-Siu/go-gitapi/v3/info"
+)
+
+// Github repository(creation) info structure
+type Info struct {
+	*base.Base
+	Info info.Info
 }
 
-func (t *Description) StringP() *string {
-	return &t.Description
-}
-
-func (t *Description) String() string {
-	return *t.StringP()
+func (t *Info) New(property *base.Property) *Info {
+	property.Info = &t.Info
+	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	return t
 }

@@ -22,21 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package repo
+package info
 
-// Github repository public key structure
-type PublicKey struct {
-	Key_id string `json:"key_id"`
-	Key    string `json:"key"`
+import (
+	"strconv"
+)
+
+// Gitea repository Actions structure
+type Actions struct {
+	Has bool `json:"has_actions"`
 }
 
-func (t *PublicKey) StringP() *string {
-	var str string
-	str += "Key:" + t.Key + "\n"
-	str += "Key ID:" + t.Key_id + "\n"
-	return &str
+func (t *Actions) String() string {
+	return strconv.FormatBool(t.Has)
 }
 
-func (t *PublicKey) String() string {
-	return *t.StringP()
+func (t *Actions) StringP() *string {
+	tmp := t.String()
+	return &tmp
 }

@@ -73,3 +73,4 @@
   - Add restapi set method wrappers
   - Split package level function to pkg.go.
   - Update go-helper/v2, go-restapi
+- v3.0.0

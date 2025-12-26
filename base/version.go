@@ -1,6 +1,4 @@
 /*
-The MIT License (MIT)
-
 Copyright © 2025 John, Sing Dao, Siu <john.sd.siu@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,17 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package repo
+package base
 
-// Github repository visibility structure
-type Visibility struct {
-	Visibility string `json:"visibility"`
-}
-
-func (t *Visibility) StringP() *string {
-	return &t.Visibility
-}
-
-func (t *Visibility) String() string {
-	return *t.StringP()
-}
+const (
+	Version = "v3.0.0"
+)

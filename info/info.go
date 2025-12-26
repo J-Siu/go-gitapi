@@ -22,20 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package repo
+package info
 
-import "strconv"
+import (
+	"strconv"
+)
 
-// Github repository private structure
-type Private struct {
-	Private bool `json:"private"`
+// Github repository(creation) info structure
+type Info struct {
+	Name    string `json:"name"`
+	Private bool   `json:"private"`
 }
 
-func (t *Private) String() string {
-	return strconv.FormatBool(t.Private)
+
+func (t *Info) StringP() *string {
+	str := t.Name + " (private:" + strconv.FormatBool(t.Private) + ")"
+	return &str
 }
 
-func (t *Private) StringP() *string {
-	tmp := t.String()
-	return &tmp
+func (t *Info) String() string {
+	return *t.StringP()
 }
