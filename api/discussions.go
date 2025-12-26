@@ -32,7 +32,7 @@ import (
 // Github repository Discussions structure
 type Discussions struct {
 	*base.Base
-	Info info.Description
+	Info info.Discussions
 }
 
 func (t *Discussions) New(property *base.Property) *Discussions {
