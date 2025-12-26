@@ -42,7 +42,7 @@ func (t *Topics) StringP() *string {
 	}
 	// Github
 	if t.Topics != nil {
-		str = strings.Join(*t.Names, ",")
+		str = strings.Join(*t.Topics, ",")
 	}
 	return &str
 }
