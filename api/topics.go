@@ -40,3 +40,12 @@ func (t *Topics) New(property *base.Property) *Topics {
 	t.Base = new(base.Base).New(property).HeaderGithub().EndpointReposTopics()
 	return t
 }
+
+func (t *Topics) Get() *Topics {
+	t.SetGet()
+	return t
+}
+func (t *Topics) Set() *Topics {
+	t.SetPut()
+	return t
+}

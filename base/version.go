@@ -23,5 +23,5 @@ THE SOFTWARE.
 package base
 
 const (
-	Version = "v3.0.0"
+	Version = "v3.0.1"
 )

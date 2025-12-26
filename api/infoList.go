@@ -25,22 +25,34 @@ THE SOFTWARE.
 package api
 
 import (
+	"strconv"
+
 	"github.com/J-Siu/go-gitapi/v3/base"
 	"github.com/J-Siu/go-gitapi/v3/info"
 )
 
-// Github repository public key structure
-type PublicKey struct {
+// Github repository(creation) info structure
+type InfoList struct {
 	*base.Base
-	Info info.PublicKey
+	Info info.InfoList
 }
 
-func (t *PublicKey) New(property *base.Property) *PublicKey {
+func (t *InfoList) New(property *base.Property, vendor base.Vendor, page int) *InfoList {
 	property.Info = &t.Info
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointReposSecretsPubkey()
+	t.Base = new(base.Base).New(property).HeaderGithub().EndpointUserRepos()
+
+	t.Req.UrlValInit()
+	// switch vendor {
+	// case base.VendorGithub:
+	t.Req.UrlVal.Add("per_page", strconv.Itoa(100)) // github
+	// case base.VendorGitea:
+	t.Req.UrlVal.Add("limit", strconv.Itoa(100)) //gitea
+	// }
+	t.Req.UrlVal.Add("page", strconv.Itoa(page))
+	*t.Repo() = ""
 	return t
 }
-func (t *PublicKey) Get() *PublicKey {
+func (t *InfoList) Get() *InfoList {
 	t.SetGet()
 	return t
 }

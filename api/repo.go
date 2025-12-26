@@ -25,22 +25,28 @@ THE SOFTWARE.
 package api
 
 import (
+	"path"
+
 	"github.com/J-Siu/go-gitapi/v3/base"
-	"github.com/J-Siu/go-gitapi/v3/info"
 )
 
-// Github repository public key structure
-type PublicKey struct {
+// Github repository(creation) info structure
+type Repo struct {
 	*base.Base
-	Info info.PublicKey
 }
 
-func (t *PublicKey) New(property *base.Property) *PublicKey {
-	property.Info = &t.Info
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointReposSecretsPubkey()
+func (t *Repo) New(property *base.Property) *Repo {
+	property.Info = nil
+	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
 	return t
 }
-func (t *PublicKey) Get() *PublicKey {
-	t.SetGet()
+func (t *Repo) Del() *Repo {
+	t.SetDel()
+	return t
+}
+func (t *Repo) DelSecret(secret string) *Repo {
+	t.EndpointReposSecrets()
+	t.Req.Endpoint = path.Join(t.Req.Endpoint, secret)
+	t.SetDel()
 	return t
 }

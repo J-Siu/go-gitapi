@@ -74,3 +74,6 @@
   - Split package level function to pkg.go.
   - Update go-helper/v2, go-restapi
 - v3.0.0
+  - refactor
+- v3.0.1
+  - add set, get for api

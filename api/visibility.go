@@ -40,3 +40,12 @@ func (t *Visibility) New(property *base.Property) *Visibility {
 	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
 	return t
 }
+
+func (t *Visibility) Get() *Visibility {
+	t.SetGet()
+	return t
+}
+func (t *Visibility) Set() *Visibility {
+	t.SetPatch()
+	return t
+}

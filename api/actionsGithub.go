@@ -40,3 +40,11 @@ func (t *ActionsGithub) New(property *base.Property) *ActionsGithub {
 	t.Base = new(base.Base).New(property).HeaderGithub().EndpointReposActionsGithub()
 	return t
 }
+func (t *ActionsGithub) Get() *ActionsGithub {
+	t.SetGet()
+	return t
+}
+func (t *ActionsGithub) Set() *ActionsGithub {
+	t.SetPut()
+	return t
+}

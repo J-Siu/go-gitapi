@@ -40,3 +40,11 @@ func (t *Description) New(property *base.Property) *Description {
 	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
 	return t
 }
+func (t *Description) Get() *Description {
+	t.SetGet()
+	return t
+}
+func (t *Description) Set() *Description {
+	t.SetPatch()
+	return t
+}

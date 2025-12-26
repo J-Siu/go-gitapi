@@ -37,3 +37,11 @@ func (t *Archived) New(property *base.Property) *Archived {
 	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
 	return t
 }
+func (t *Archived) Get() *Archived {
+	t.SetGet()
+	return t
+}
+func (t *Archived) Set() *Archived {
+	t.SetPatch()
+	return t
+}

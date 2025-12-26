@@ -39,3 +39,11 @@ func (t *Actions) New(property *base.Property) *Actions {
 	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
 	return t
 }
+func (t *Actions) Get() *Actions {
+	t.SetGet()
+	return t
+}
+func (t *Actions) Set() *Actions {
+	t.SetPatch()
+	return t
+}

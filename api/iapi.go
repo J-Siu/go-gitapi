@@ -32,5 +32,5 @@ type IApi interface {
 	Name() string
 	Ok() bool
 	Output() *string
-	Repo() string
+	Repo() *string
 }

@@ -40,3 +40,7 @@ func (t *EncryptedPair) New(property *base.Property) *EncryptedPair {
 	t.Base = new(base.Base).New(property).HeaderGithub().EndpointReposSecrets()
 	return t
 }
+func (t *EncryptedPair) Set() *EncryptedPair {
+	t.SetPut()
+	return t
+}

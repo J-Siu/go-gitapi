@@ -42,3 +42,11 @@ func (t *Wiki) New(property *base.Property) *Wiki {
 	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
 	return t
 }
+func (t *Wiki) Get() *Wiki {
+	t.SetGet()
+	return t
+}
+func (t *Wiki) Set() *Wiki {
+	t.SetPatch()
+	return t
+}

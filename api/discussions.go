@@ -40,3 +40,11 @@ func (t *Discussions) New(property *base.Property) *Discussions {
 	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
 	return t
 }
+func (t *Discussions) Get() *Discussions {
+	t.SetGet()
+	return t
+}
+func (t *Discussions) Set() *Discussions {
+	t.SetPatch()
+	return t
+}

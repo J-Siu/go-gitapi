@@ -40,3 +40,11 @@ func (t *Private) New(property *base.Property) *Private {
 	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
 	return t
 }
+func (t *Private) Get() *Private {
+	t.SetGet()
+	return t
+}
+func (t *Private) Set() *Private {
+	t.SetPatch()
+	return t
+}

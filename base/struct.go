@@ -65,7 +65,7 @@ func (t *Base) EndpointUserRepos() *Base {
 //
 // Use current directory if GitApi.Repo is empty
 func (t *Base) EndpointRepos() *Base {
-	t.Req.Endpoint = path.Join("repos", t.User, t.Repo())
+	t.Req.Endpoint = path.Join("repos", t.User, *t.Repo())
 	return t
 }
 
@@ -143,4 +143,4 @@ func (t *Base) Err() *string    { return t.Api.Err() }
 func (t *Base) Name() string    { return t.Property.Name }
 func (t *Base) Ok() bool        { return t.Api.Ok() }
 func (t *Base) Output() *string { return t.Api.Output() }
-func (t *Base) Repo() string    { return t.Property.Repo }
+func (t *Base) Repo() *string   { return &t.Property.Repo }
