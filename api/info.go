@@ -26,17 +26,15 @@ package api
 
 import (
 	"github.com/J-Siu/go-gitapi/v3/base"
-	"github.com/J-Siu/go-gitapi/v3/info"
 )
 
 // Github repository(creation) info structure
 type Info struct {
 	*base.Base
-	Info info.Info
 }
 
 func (t *Info) New(property *base.Property) *Info {
-	property.Info = &t.Info
+	property.Info = nil
 	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
 	return t
 }
