@@ -77,3 +77,7 @@
   - refactor
 - v3.0.1
   - add set, get for api
+- v3.0.2
+  - add api Repo Create()
+  - fix api Info
+  - fix api Topics using wrong field
