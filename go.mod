@@ -1,9 +1,9 @@
 module github.com/J-Siu/go-gitapi/v3
 
-go 1.25.1
+go 1.25.5
 
 require (
-	github.com/J-Siu/go-helper/v2 v2.6.5
+	github.com/J-Siu/go-helper/v2 v2.6.9
 	github.com/J-Siu/go-restapi v1.0.3
 )
 
