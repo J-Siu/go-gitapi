@@ -81,3 +81,7 @@
   - add api Repo Create()
   - fix api Info
   - fix api Topics using wrong field
+- v3.0.3
+  - merge api Actions, ActionsGithub
+  - move HeaderGitHub() call to Base.New()
+  - update go-helper
