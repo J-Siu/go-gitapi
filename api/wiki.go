@@ -35,17 +35,17 @@ type Wiki struct {
 	Info info.Wiki
 }
 
-// Set endpoint
-// Assign as info
 func (t *Wiki) New(property *base.Property) *Wiki {
 	property.Info = &t.Info
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	t.Base = new(base.Base).New(property).EndpointRepos()
 	return t
 }
+
 func (t *Wiki) Get() *Wiki {
 	t.SetGet()
 	return t
 }
+
 func (t *Wiki) Set() *Wiki {
 	t.SetPatch()
 	return t

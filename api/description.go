@@ -37,13 +37,15 @@ type Description struct {
 
 func (t *Description) New(property *base.Property) *Description {
 	property.Info = &t.Info
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	t.Base = new(base.Base).New(property).EndpointRepos()
 	return t
 }
+
 func (t *Description) Get() *Description {
 	t.SetGet()
 	return t
 }
+
 func (t *Description) Set() *Description {
 	t.SetPatch()
 	return t

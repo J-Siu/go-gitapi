@@ -33,20 +33,21 @@ import (
 
 // Base
 type Base struct {
-	*restapi.Api `json:"rest_api,omitempty"`
 	*Property
+	*restapi.Api
 }
 
 // Setup a *GitApi
 func (t *Base) New(property *Property) *Base {
+	t.Property = property
 	apiProperty := restapi.Property{
-		Debug:      property.Debug,
-		EntryPoint: property.EntryPoint,
-		Info:       property.Info,
-		SkipVerify: property.SkipVerify,
+		Debug:      t.Debug,
+		EntryPoint: t.EntryPoint,
+		Info:       t.Info,
+		SkipVerify: t.SkipVerify,
 	}
 	t.Api = new(restapi.Api).New(&apiProperty)
-	t.Property = property
+	t.HeaderGithub()
 	return t
 }
 
@@ -87,7 +88,7 @@ func (t *Base) EndpointReposSecretsPubkey() *Base {
 	return t
 }
 
-// Initialize endpoint /repos/OWNER/REPO/actions/secrets/public-key
+// Initialize endpoint /repos/OWNER/REPO/actions/permission
 func (t *Base) EndpointReposActionsGithub() *Base {
 	t.Req.Endpoint = path.Join(t.EndpointRepos().Req.Endpoint, "actions", "permissions")
 	return t

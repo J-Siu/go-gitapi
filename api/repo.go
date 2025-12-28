@@ -39,14 +39,7 @@ type Repo struct {
 
 func (t *Repo) New(property *base.Property) *Repo {
 	property.Info = &t.Info
-	t.Base = new(base.Base).New(property).HeaderGithub()
-	return t
-}
-
-// Set action: delete
-func (t *Repo) Del() *Repo {
-	t.Base.Info = nil
-	t.EndpointRepos().SetDel()
+	t.Base = new(base.Base).New(property)
 	return t
 }
 
@@ -55,6 +48,15 @@ func (t *Repo) Create() *Repo {
 	t.EndpointUserRepos().SetPost()
 	return t
 }
+
+// Set action: delete
+func (t *Repo) Del() *Repo {
+	t.Base.Info = nil
+	t.Base.Api.Info = nil
+	t.EndpointRepos().SetDel()
+	return t
+}
+
 func (t *Repo) DelSecret(secret string) *Repo {
 	t.EndpointReposSecrets().SetDel()
 	t.Req.Endpoint = path.Join(t.Req.Endpoint, secret)

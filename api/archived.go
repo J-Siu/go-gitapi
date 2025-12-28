@@ -34,13 +34,15 @@ type Archived struct {
 
 func (t *Archived) New(property *base.Property) *Archived {
 	property.Info = &t.Info
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	t.Base = new(base.Base).New(property).EndpointRepos()
 	return t
 }
+
 func (t *Archived) Get() *Archived {
 	t.SetGet()
 	return t
 }
+
 func (t *Archived) Set() *Archived {
 	t.SetPatch()
 	return t

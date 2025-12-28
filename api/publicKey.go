@@ -37,9 +37,10 @@ type PublicKey struct {
 
 func (t *PublicKey) New(property *base.Property) *PublicKey {
 	property.Info = &t.Info
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointReposSecretsPubkey()
+	t.Base = new(base.Base).New(property).EndpointReposSecretsPubkey()
 	return t
 }
+
 func (t *PublicKey) Get() *PublicKey {
 	t.SetGet()
 	return t

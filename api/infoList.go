@@ -39,19 +39,16 @@ type InfoList struct {
 
 func (t *InfoList) New(property *base.Property, vendor base.Vendor, page int) *InfoList {
 	property.Info = &t.Info
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointUserRepos()
+	t.Base = new(base.Base).New(property).EndpointUserRepos()
 
 	t.Req.UrlValInit()
-	// switch vendor {
-	// case base.VendorGithub:
 	t.Req.UrlVal.Add("per_page", strconv.Itoa(100)) // github
-	// case base.VendorGitea:
-	t.Req.UrlVal.Add("limit", strconv.Itoa(100)) //gitea
-	// }
+	t.Req.UrlVal.Add("limit", strconv.Itoa(100))    //gitea
 	t.Req.UrlVal.Add("page", strconv.Itoa(page))
 	*t.Repo() = ""
 	return t
 }
+
 func (t *InfoList) Get() *InfoList {
 	t.SetGet()
 	return t

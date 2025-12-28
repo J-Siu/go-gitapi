@@ -37,13 +37,15 @@ type Private struct {
 
 func (t *Private) New(property *base.Property) *Private {
 	property.Info = &t.Info
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	t.Base = new(base.Base).New(property).EndpointRepos()
 	return t
 }
+
 func (t *Private) Get() *Private {
 	t.SetGet()
 	return t
 }
+
 func (t *Private) Set() *Private {
 	t.SetPatch()
 	return t

@@ -37,7 +37,7 @@ type Visibility struct {
 
 func (t *Visibility) New(property *base.Property) *Visibility {
 	property.Info = &t.Info
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	t.Base = new(base.Base).New(property).EndpointRepos()
 	return t
 }
 
@@ -45,6 +45,7 @@ func (t *Visibility) Get() *Visibility {
 	t.SetGet()
 	return t
 }
+
 func (t *Visibility) Set() *Visibility {
 	t.SetPatch()
 	return t

@@ -35,9 +35,10 @@ type Info struct {
 
 func (t *Info) New(property *base.Property) *Info {
 	property.Info = nil
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	t.Base = new(base.Base).New(property).EndpointRepos()
 	return t
 }
+
 func (t *Info) Get() *Info {
 	t.SetGet()
 	return t

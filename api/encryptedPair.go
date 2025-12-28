@@ -37,9 +37,10 @@ type EncryptedPair struct {
 
 func (t *EncryptedPair) New(property *base.Property) *EncryptedPair {
 	property.Info = &t.Info
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointReposSecrets()
+	t.Base = new(base.Base).New(property).EndpointReposSecrets()
 	return t
 }
+
 func (t *EncryptedPair) Set() *EncryptedPair {
 	t.SetPut()
 	return t

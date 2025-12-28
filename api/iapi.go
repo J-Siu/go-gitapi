@@ -26,6 +26,7 @@ package api
 
 import "github.com/J-Siu/go-gitapi/v3/base"
 
+// gitapi interface
 type IApi interface {
 	Do() *base.Base
 	Err() *string

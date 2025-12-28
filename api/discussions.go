@@ -37,13 +37,15 @@ type Discussions struct {
 
 func (t *Discussions) New(property *base.Property) *Discussions {
 	property.Info = &t.Info
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	t.Base = new(base.Base).New(property).EndpointRepos()
 	return t
 }
+
 func (t *Discussions) Get() *Discussions {
 	t.SetGet()
 	return t
 }
+
 func (t *Discussions) Set() *Discussions {
 	t.SetPatch()
 	return t
