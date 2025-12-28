@@ -30,11 +30,18 @@ import (
 
 // Gitea repository Actions structure
 type Actions struct {
-	Has bool `json:"has_actions"`
+	Enabled bool `json:"enabled"`
+	Has     bool `json:"has_actions"`
+}
+
+func (t *Actions) Enable(enable bool) *Actions {
+	t.Enabled = enable
+	t.Has = enable
+	return t
 }
 
 func (t *Actions) String() string {
-	return strconv.FormatBool(t.Has)
+	return strconv.FormatBool(t.Has || t.Enabled)
 }
 
 func (t *Actions) StringP() *string {

@@ -31,18 +31,26 @@ import (
 
 type Actions struct {
 	*base.Base
-	Info info.Actions
+	Info *info.Actions
 }
 
 func (t *Actions) New(property *base.Property) *Actions {
-	property.Info = &t.Info
-	t.Base = new(base.Base).New(property).HeaderGithub().EndpointRepos()
+	t.Info = new(info.Actions)
+	property.Info = t.Info
+	t.Base = new(base.Base).New(property)
+	if property.Vendor == base.VendorGithub {
+		t.EndpointReposActionsGithub()
+	} else {
+		t.EndpointRepos()
+	}
 	return t
 }
+
 func (t *Actions) Get() *Actions {
 	t.SetGet()
 	return t
 }
+
 func (t *Actions) Set() *Actions {
 	t.SetPatch()
 	return t
