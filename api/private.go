@@ -46,7 +46,8 @@ func (t *Private) Get() *Private {
 	return t
 }
 
-func (t *Private) Set() *Private {
+func (t *Private) Set(enable bool) *Private {
+	t.Info.Private = enable
 	t.SetPatch()
 	return t
 }

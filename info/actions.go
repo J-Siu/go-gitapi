@@ -34,7 +34,7 @@ type Actions struct {
 	Has     bool `json:"has_actions"`
 }
 
-func (t *Actions) Enable(enable bool) *Actions {
+func (t *Actions) Set(enable bool) *Actions {
 	t.Enabled = enable
 	t.Has = enable
 	return t

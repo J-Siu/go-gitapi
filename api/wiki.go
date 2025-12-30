@@ -46,7 +46,8 @@ func (t *Wiki) Get() *Wiki {
 	return t
 }
 
-func (t *Wiki) Set() *Wiki {
+func (t *Wiki) Set(enable bool) *Wiki {
+	t.Info.Has = enable
 	t.SetPatch()
 	return t
 }

@@ -46,7 +46,8 @@ func (t *Discussions) Get() *Discussions {
 	return t
 }
 
-func (t *Discussions) Set() *Discussions {
+func (t *Discussions) Set(enable bool) *Discussions {
+	t.Info.Has = enable
 	t.SetPatch()
 	return t
 }

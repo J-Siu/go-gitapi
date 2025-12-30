@@ -85,3 +85,5 @@
   - merge api Actions, ActionsGithub
   - move HeaderGitHub() call to Base.New()
   - update go-helper
+- v3.0.4
+  - api `Set()`s take parameter

@@ -46,7 +46,8 @@ func (t *Description) Get() *Description {
 	return t
 }
 
-func (t *Description) Set() *Description {
+func (t *Description) Set(description string) *Description {
+	t.Info.Description = description
 	t.SetPatch()
 	return t
 }

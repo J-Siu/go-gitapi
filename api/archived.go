@@ -43,7 +43,8 @@ func (t *Archived) Get() *Archived {
 	return t
 }
 
-func (t *Archived) Set() *Archived {
+func (t *Archived) Set(enable bool) *Archived {
+	t.Info.Archived = enable
 	t.SetPatch()
 	return t
 }

@@ -46,7 +46,8 @@ func (t *Projects) Get() *Projects {
 	return t
 }
 
-func (t *Projects) Set() *Projects {
+func (t *Projects) Set(enable bool) *Projects {
+	t.Info.Has=enable
 	t.SetPatch()
 	return t
 }

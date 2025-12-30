@@ -46,7 +46,12 @@ func (t *Visibility) Get() *Visibility {
 	return t
 }
 
-func (t *Visibility) Set() *Visibility {
+func (t *Visibility) Set(enable bool) *Visibility {
+	if enable {
+		t.Info.Visibility = "public"
+	} else {
+		t.Info.Visibility = "private"
+	}
 	t.SetPatch()
 	return t
 }

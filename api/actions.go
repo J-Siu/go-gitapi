@@ -51,7 +51,8 @@ func (t *Actions) Get() *Actions {
 	return t
 }
 
-func (t *Actions) Set() *Actions {
+func (t *Actions) Set(enable bool) *Actions {
+	t.Info.Set(enable)
 	t.SetPatch()
 	return t
 }
