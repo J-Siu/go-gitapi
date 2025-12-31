@@ -100,8 +100,9 @@ func (t *Base) EndpointReposActionsGithub() *Base {
 func (t *Base) HeaderGithub() *Base {
 	header := make(http.Header)
 	t.Req.Header = &header
-	t.Req.Header.Add("Accept", "application/vnd.github.v3+json")
+	t.Req.Header.Add("Accept", "application/vnd.github+json")
 	t.Req.Header.Add("Content-Type", "application/json")
+	t.Req.Header.Add("X-GitHub-Api-Version", "2022-11-28")
 	if t.Token != "" {
 		t.Req.Header.Add("Authorization", "token "+t.Token)
 	}
