@@ -34,5 +34,5 @@ type Property struct {
 	Repo   string `json:"repo,omitempty"`
 	Token  string `json:"token,omitempty"`
 	User   string `json:"user,omitempty"`
-	Vendor Vendor `json:"vendor,omitempty"`
+	Vendor string `json:"vendor,omitempty"`
 }

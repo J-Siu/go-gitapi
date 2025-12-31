@@ -37,7 +37,7 @@ type InfoList struct {
 	Info info.InfoList
 }
 
-func (t *InfoList) New(property *base.Property, vendor base.Vendor, page int) *InfoList {
+func (t *InfoList) New(property *base.Property, page int) *InfoList {
 	property.Info = &t.Info
 	t.Base = new(base.Base).New(property).EndpointUserRepos()
 

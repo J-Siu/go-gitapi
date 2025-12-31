@@ -22,13 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package base
+package vendor
 
-type Vendor string
+type Vendor int8
 
 // GitApi supported vendors
 const (
-	VendorGithub Vendor = "github"
-	VendorGitea  Vendor = "gitea"
-	VendorGogs   Vendor = "gogs"
+	Github Vendor = iota
+	Gitea
+	Gogs
 )

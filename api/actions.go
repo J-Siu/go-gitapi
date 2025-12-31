@@ -25,8 +25,11 @@ THE SOFTWARE.
 package api
 
 import (
+	"strings"
+
 	"github.com/J-Siu/go-gitapi/v3/base"
 	"github.com/J-Siu/go-gitapi/v3/info"
+	"github.com/J-Siu/go-gitapi/v3/vendor"
 )
 
 type Actions struct {
@@ -38,7 +41,7 @@ func (t *Actions) New(property *base.Property) *Actions {
 	t.Info = new(info.Actions)
 	property.Info = t.Info
 	t.Base = new(base.Base).New(property)
-	if t.Vendor == base.VendorGithub {
+	if strings.EqualFold(t.Vendor, vendor.Github.String()) {
 		t.EndpointReposActionsGithub()
 	} else {
 		t.EndpointRepos()
