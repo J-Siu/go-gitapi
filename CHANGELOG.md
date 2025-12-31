@@ -87,3 +87,5 @@
   - update go-helper
 - v3.0.4
   - api `Set()`s take parameter
+- v3.0.5
+  - api.EncryptedPair.Do() handle getting public key

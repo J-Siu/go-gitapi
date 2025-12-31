@@ -38,7 +38,7 @@ func (t *Actions) New(property *base.Property) *Actions {
 	t.Info = new(info.Actions)
 	property.Info = t.Info
 	t.Base = new(base.Base).New(property)
-	if property.Vendor == base.VendorGithub {
+	if t.Vendor == base.VendorGithub {
 		t.EndpointReposActionsGithub()
 	} else {
 		t.EndpointRepos()

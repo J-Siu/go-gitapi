@@ -25,14 +25,20 @@ THE SOFTWARE.
 package api
 
 import (
+	"path"
+
+	"github.com/J-Siu/go-crypto/crypto"
 	"github.com/J-Siu/go-gitapi/v3/base"
 	"github.com/J-Siu/go-gitapi/v3/info"
 )
 
 // Github repository action secret structure
+// Do() handles public key
 type EncryptedPair struct {
 	*base.Base
-	Info info.EncryptedPair
+	Info  info.EncryptedPair
+	name  string
+	value string
 }
 
 func (t *EncryptedPair) New(property *base.Property) *EncryptedPair {
@@ -41,7 +47,37 @@ func (t *EncryptedPair) New(property *base.Property) *EncryptedPair {
 	return t
 }
 
-func (t *EncryptedPair) Set() *EncryptedPair {
+func (t *EncryptedPair) Set(name, value string) *EncryptedPair {
+	t.name = name
+	t.value = value
+	t.Base.Req.Endpoint = path.Join(t.Base.Req.Endpoint, t.name)
 	t.SetPut()
+	return t
+}
+
+// Do() handles public key
+func (t *EncryptedPair) Do() *base.Base {
+	// Get public key -- start
+	var (
+		publicKey = new(PublicKey).New(t.Property)
+	)
+	if !publicKey.Do().Ok() {
+		return publicKey.Base
+	}
+	// Get public key -- end
+	t.encrypt(&publicKey.Info)
+	if *t.Err() == "" {
+		t.Base.Do()
+	}
+	return t.Base
+}
+
+func (t *EncryptedPair) encrypt(pk *info.PublicKey) *EncryptedPair {
+	t.Info.Key_id = pk.Key_id
+	encrypted_value, e := crypto.BoxSealAnonymous(&pk.Key, &t.value)
+	t.Info.Encrypted_value = *encrypted_value
+	if e != nil {
+		t.Res.Err = e.Error()
+	}
 	return t
 }
