@@ -10,12 +10,11 @@ func _() {
 	var x [1]struct{}
 	_ = x[Github-0]
 	_ = x[Gitea-1]
-	_ = x[Gogs-2]
 }
 
-const _Vendor_name = "GithubGiteaGogs"
+const _Vendor_name = "GithubGitea"
 
-var _Vendor_index = [...]uint8{0, 6, 11, 15}
+var _Vendor_index = [...]uint8{0, 6, 11}
 
 func (i Vendor) String() string {
 	if i < 0 || i >= Vendor(len(_Vendor_index)-1) {

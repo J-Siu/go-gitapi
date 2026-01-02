@@ -30,5 +30,4 @@ type Vendor int8
 const (
 	Github Vendor = iota
 	Gitea
-	Gogs
 )
