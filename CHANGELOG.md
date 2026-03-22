@@ -89,3 +89,8 @@
   - api `Set()`s take parameter
 - v3.0.5
   - api.EncryptedPair.Do() handle getting public key
+- v3.0.6
+  - update api vendor constants
+- v3.0.7
+  - update github api version to 2026-03-10
+  - update github, gitea support
