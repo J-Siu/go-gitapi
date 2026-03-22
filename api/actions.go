@@ -56,6 +56,11 @@ func (t *Actions) Get() *Actions {
 
 func (t *Actions) Set(enable bool) *Actions {
 	t.Info.Set(enable)
-	t.SetPatch()
+	switch t.Vendor {
+	case "github":
+		t.SetPut()
+	default:
+		t.SetPatch()
+	}
 	return t
 }
