@@ -102,7 +102,7 @@ func (t *Base) HeaderGithub() *Base {
 	t.Req.Header = &header
 	t.Req.Header.Add("Accept", "application/vnd.github+json")
 	t.Req.Header.Add("Content-Type", "application/json")
-	t.Req.Header.Add("X-GitHub-Api-Version", "2022-11-28")
+	t.Req.Header.Add("X-GitHub-Api-Version", "2026-03-10")
 	if t.Token != "" {
 		t.Req.Header.Add("Authorization", "token "+t.Token)
 	}
