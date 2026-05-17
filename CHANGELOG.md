@@ -94,3 +94,5 @@
 - v3.0.7
   - update github api version to 2026-03-10
   - update github, gitea support
+- v3.0.8
+  - update go-helper/v2

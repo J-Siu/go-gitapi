@@ -63,6 +63,6 @@ func TestGetGithubRepository(t *testing.T) {
 	ezlog.Log().N("Count").M(len(repoList)).Out()
 
 	if !success {
-		t.Fatalf("Failed:\n%s", *strany.Any(gitApi))
+		t.Fatalf("Failed:\n%s", strany.Any(gitApi))
 	}
 }
