@@ -73,9 +73,9 @@ func (t *EncryptedPair) Do() *base.Base {
 }
 
 func (t *EncryptedPair) encrypt(pk *info.PublicKey) *EncryptedPair {
+	var e error
 	t.Info.Key_id = pk.Key_id
-	encrypted_value, e := crypto.BoxSealAnonymous(&pk.Key, &t.value)
-	t.Info.Encrypted_value = *encrypted_value
+	t.Info.Encrypted_value, e = crypto.BoxSealAnonymous(&pk.Key, &t.value)
 	if e != nil {
 		t.Res.Err = e.Error()
 	}

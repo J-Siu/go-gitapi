@@ -96,3 +96,6 @@
   - update github, gitea support
 - v3.0.8
   - update go-helper/v2
+- v3.0.9
+  - update go-crypto
+  - update go-helper/v2
