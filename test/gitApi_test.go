@@ -25,12 +25,12 @@ THE SOFTWARE.
 package gitApi_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/J-Siu/go-gitapi/v3/base"
 	"github.com/J-Siu/go-gitapi/v3/info"
-	"github.com/J-Siu/go-helper/v2/ezlog"
-	"github.com/J-Siu/go-helper/v2/strany"
+	"github.com/J-Siu/go-helper-mini/str"
 )
 
 func TestGetGithubRepository(t *testing.T) {
@@ -57,12 +57,12 @@ func TestGetGithubRepository(t *testing.T) {
 
 	// Get request
 	success := gitApi.Api.Get().Res.Ok()
-	ezlog.Log().N("List").Lm(res.Output).Out()
-	ezlog.Log().N("Url").Lm(res.Url).Out()
-	ezlog.Log().Lm(res.Url.String()).Out()
-	ezlog.Log().N("Count").M(len(repoList)).Out()
+	fmt.Println(str.Struct2String("List", res.Output, true))
+	fmt.Println(str.Struct2String("Url", res.Url, true))
+	fmt.Println(res.Url.String())
+	fmt.Println("Count:", len(repoList))
 
 	if !success {
-		t.Fatalf("Failed:\n%s", strany.Any(gitApi))
+		t.Fatalf(str.Struct2String("Failed", gitApi, true))
 	}
 }
