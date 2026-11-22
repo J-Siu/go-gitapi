@@ -25,7 +25,6 @@ THE SOFTWARE.
 package base
 
 type Property struct {
-	Debug      bool   `json:"debug,omitempty"`
 	EntryPoint string `json:"entry_point,omitempty"`
 	Info       IInfo  `json:"info,omitempty"`
 	SkipVerify bool   `json:"skip_verify,omitempty"`

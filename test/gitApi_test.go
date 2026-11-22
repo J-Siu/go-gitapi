@@ -34,13 +34,9 @@ import (
 )
 
 func TestGetGithubRepository(t *testing.T) {
-
-	// helper.Debug = true
-
 	var (
 		repoList info.InfoList
 		property = base.Property{
-			// Debug:      true,
 			EntryPoint: "https://api.github.com",
 			Info:       &repoList,
 			Name:       "Test",
@@ -63,6 +59,6 @@ func TestGetGithubRepository(t *testing.T) {
 	fmt.Println("Count:", len(repoList))
 
 	if !success {
-		t.Fatalf(str.Struct2String("Failed", gitApi, true))
+		t.Fatalf("%s", str.Struct2String("Failed", gitApi, true))
 	}
 }

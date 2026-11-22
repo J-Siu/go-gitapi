@@ -41,7 +41,6 @@ type Base struct {
 func (t *Base) New(property *Property) *Base {
 	t.Property = property
 	apiProperty := restapi.Property{
-		Debug:      t.Debug,
 		EntryPoint: t.EntryPoint,
 		Info:       t.Info,
 		SkipVerify: t.SkipVerify,
