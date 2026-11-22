@@ -20,7 +20,7 @@
 - v1.2.6
   - Update go-helper package for bug fix
 - v1.3.0
-  - All GitApi methods reutrn self pointer
+  - All GitApi methods return self pointer
   - Interface GitApiInfo remove type restrictions
   - Member GitApi.In -> GitApi.Req
   - Member GitApi.Out -> GitApi.Res
@@ -101,3 +101,5 @@
   - update go-helper/v2
 - v3.0.10
   - dep: use go-helper-mini
+- v3.0.11
+  - refactor: rm debug output

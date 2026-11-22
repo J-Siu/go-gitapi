@@ -13,7 +13,6 @@ Golang Github/Gitea api library using [go-restapi](https://github.com/J-Siu/go-r
 - [Used By Project](#used-by-project)
 - [Repository](#repository)
 - [Contributors](#contributors)
-- [Change Log](#change-log)
 - [License](#license)
 
 <!-- /TOC -->
@@ -84,7 +83,6 @@ Following is code to create a new repository:
 2. Setup and execute
     ```go
     property = gitapi.Property{
-      // Debug:      true,
       EntryPoint: "https://api.github.com",
       Info:       &repoList,
       Name:       "Test",
